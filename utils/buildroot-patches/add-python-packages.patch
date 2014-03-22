@@ -1,0 +1,260 @@
+Adds the following python packages:
+python-flask
+python-itsdangerous
+python-jinja2
+python-markupsafe
+python-twisted
+python-werkzeug
+python-zopeinterface
+
+Signed-off-by: Adolfo Garcia <adolfo.garcia.cr@gmail.com>
+
+diff -rupN buildroot-2014.02.orig/package/Config.in buildroot-2014.02/package/Config.in
+--- buildroot-2014.02.orig/package/Config.in	2014-03-01 22:53:02.483424261 -0600
++++ buildroot-2014.02/package/Config.in	2014-03-01 22:57:20.931421389 -0600
+@@ -403,11 +403,15 @@ source "package/python-configobj/Config.
+ source "package/python-crc16/Config.in"
+ source "package/python-dialog/Config.in"
+ source "package/python-dpkt/Config.in"
++source "package/python-flask/Config.in"
+ source "package/python-id3/Config.in"
+ source "package/python-ipy/Config.in"
++source "package/python-itsdangerous/Config.in"
++source "package/python-jinja2/Config.in"
+ source "package/python-json-schema-validator/Config.in"
+ source "package/python-keyring/Config.in"
+ source "package/python-mad/Config.in"
++source "package/python-markupsafe/Config.in"
+ source "package/python-meld3/Config.in"
+ source "package/python-msgpack/Config.in"
+ source "package/python-netifaces/Config.in"
+@@ -429,7 +433,10 @@ source "package/python-setuptools/Config
+ source "package/python-simplejson/Config.in"
+ source "package/python-thrift/Config.in"
+ source "package/python-tornado/Config.in"
++source "package/python-twisted/Config.in"
+ source "package/python-versiontools/Config.in"
++source "package/python-werkzeug/Config.in"
++source "package/python-zopeinterface/Config.in"
+ endmenu
+ endif
+ source "package/python3/Config.in"
+diff -rupN buildroot-2014.02.orig/package/python-flask/Config.in buildroot-2014.02/package/python-flask/Config.in
+--- buildroot-2014.02.orig/package/python-flask/Config.in	1969-12-31 18:00:00.000000000 -0600
++++ buildroot-2014.02/package/python-flask/Config.in	2014-03-01 22:53:35.135423899 -0600
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_PYTHON_FLASK
++	bool "python-flask"
++	depends on BR2_PACKAGE_PYTHON
++    select BR2_PACKAGE_PYTHON_ITSDANGEROUS
++    select BR2_PACKAGE_PYTHON_JINJA2
++    select BR2_PACKAGE_PYTHON_WERKZEUG
++	help
++	  A microframework for Python based on Werkzeug.
++
++	  http://flask.pocoo.org/
+diff -rupN buildroot-2014.02.orig/package/python-flask/python-flask.mk buildroot-2014.02/package/python-flask/python-flask.mk
+--- buildroot-2014.02.orig/package/python-flask/python-flask.mk	1969-12-31 18:00:00.000000000 -0600
++++ buildroot-2014.02/package/python-flask/python-flask.mk	2014-03-01 22:53:35.135423899 -0600
+@@ -0,0 +1,17 @@
++################################################################################
++#
++# python-flask
++#
++################################################################################
++
++PYTHON_FLASK_VERSION = 0.10.1
++PYTHON_FLASK_SOURCE = Flask-$(PYTHON_FLASK_VERSION).tar.gz
++PYTHON_FLASK_SITE = http://pypi.python.org/packages/source/F/Flask
++PYTHON_FLASK_LICENSE = BSD
++PYTHON_FLASK_DEPENDENCIES = python-itsdangerous host-python-itsdangerous \
++                            python-jinja2 host-python-jinja2 \
++                            python-werkzeug host-python-werkzeug
++PYTHON_FLASK_SETUP_TYPE = setuptools
++
++$(eval $(python-package))
++$(eval $(host-python-package))
+diff -rupN buildroot-2014.02.orig/package/python-itsdangerous/Config.in buildroot-2014.02/package/python-itsdangerous/Config.in
+--- buildroot-2014.02.orig/package/python-itsdangerous/Config.in	1969-12-31 18:00:00.000000000 -0600
++++ buildroot-2014.02/package/python-itsdangerous/Config.in	2014-03-01 22:54:19.779423402 -0600
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_ITSDANGEROUS
++	bool "python-itsdangerous"
++	depends on BR2_PACKAGE_PYTHON
++	help
++	  A collection of helpers to pass trusted data.
++
++	  http://github.com/mitsuhiko/itsdangerous
+diff -rupN buildroot-2014.02.orig/package/python-itsdangerous/python-itsdangerous.mk buildroot-2014.02/package/python-itsdangerous/python-itsdangerous.mk
+--- buildroot-2014.02.orig/package/python-itsdangerous/python-itsdangerous.mk	1969-12-31 18:00:00.000000000 -0600
++++ buildroot-2014.02/package/python-itsdangerous/python-itsdangerous.mk	2014-03-01 22:54:19.779423402 -0600
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-istdangerous
++#
++################################################################################
++
++PYTHON_ITSDANGEROUS_VERSION = 0.23
++PYTHON_ITSDANGEROUS_SOURCE = itsdangerous-$(PYTHON_ITSDANGEROUS_VERSION).tar.gz
++PYTHON_ITSDANGEROUS_SITE = http://pypi.python.org/packages/source/i/itsdangerous
++PYTHON_ITSDANGEROUS_LICENSE = BSD
++PYTHON_ITSDANGEROUS_SETUP_TYPE = setuptools
++
++$(eval $(python-package))
++$(eval $(host-python-package))
+diff -rupN buildroot-2014.02.orig/package/python-jinja2/Config.in buildroot-2014.02/package/python-jinja2/Config.in
+--- buildroot-2014.02.orig/package/python-jinja2/Config.in	1969-12-31 18:00:00.000000000 -0600
++++ buildroot-2014.02/package/python-jinja2/Config.in	2014-03-01 22:54:05.195423564 -0600
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_PYTHON_JINJA2
++	bool "python-jinja2"
++	depends on BR2_PACKAGE_PYTHON
++    select BR2_PACKAGE_PYTHON_MARKUPSAFE
++	help
++	  A modern designer friendly templating language for Python.
++
++	  http://jinja.pocoo.org/
+diff -rupN buildroot-2014.02.orig/package/python-jinja2/python-jinja2.mk buildroot-2014.02/package/python-jinja2/python-jinja2.mk
+--- buildroot-2014.02.orig/package/python-jinja2/python-jinja2.mk	1969-12-31 18:00:00.000000000 -0600
++++ buildroot-2014.02/package/python-jinja2/python-jinja2.mk	2014-03-01 22:54:05.195423564 -0600
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# python-jinja2
++#
++################################################################################
++
++PYTHON_JINJA2_VERSION = 2.7.2
++PYTHON_JINJA2_SOURCE = Jinja2-$(PYTHON_JINJA2_VERSION).tar.gz
++PYTHON_JINJA2_SITE = http://pypi.python.org/packages/source/J/Jinja2
++PYTHON_JINJA2_LICENSE = BSD
++PYTHON_JINJA2_DEPENDENCIES = python-markupsafe host-python-markupsafe
++PYTHON_JINJA2_SETUP_TYPE = setuptools
++
++$(eval $(python-package))
++$(eval $(host-python-package))
+diff -rupN buildroot-2014.02.orig/package/python-markupsafe/Config.in buildroot-2014.02/package/python-markupsafe/Config.in
+--- buildroot-2014.02.orig/package/python-markupsafe/Config.in	1969-12-31 18:00:00.000000000 -0600
++++ buildroot-2014.02/package/python-markupsafe/Config.in	2014-03-01 22:54:12.687423481 -0600
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_MARKUPSAFE
++	bool "python-markupsafe"
++	depends on BR2_PACKAGE_PYTHON
++	help
++	  An implementation of XML/HTML/XHTML markup safe strings.
++
++	  http://github.com/mitsuhiko/markupsafe
+diff -rupN buildroot-2014.02.orig/package/python-markupsafe/python-markupsafe.mk buildroot-2014.02/package/python-markupsafe/python-markupsafe.mk
+--- buildroot-2014.02.orig/package/python-markupsafe/python-markupsafe.mk	1969-12-31 18:00:00.000000000 -0600
++++ buildroot-2014.02/package/python-markupsafe/python-markupsafe.mk	2014-03-01 22:54:12.687423481 -0600
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-markupsafe
++#
++################################################################################
++
++PYTHON_MARKUPSAFE_VERSION = 0.18
++PYTHON_MARKUPSAFE_SOURCE = MarkupSafe-$(PYTHON_MARKUPSAFE_VERSION).tar.gz
++PYTHON_MARKUPSAFE_SITE = http://pypi.python.org/packages/source/M/Markupsafe
++PYTHON_MARKUPSAFE_LICENSE = BSD
++PYTHON_MARKUPSAFE_SETUP_TYPE = setuptools
++
++$(eval $(python-package))
++$(eval $(host-python-package))
+diff -rupN buildroot-2014.02.orig/package/python-twisted/Config.in buildroot-2014.02/package/python-twisted/Config.in
+--- buildroot-2014.02.orig/package/python-twisted/Config.in	1969-12-31 18:00:00.000000000 -0600
++++ buildroot-2014.02/package/python-twisted/Config.in	2014-03-01 22:53:15.623424115 -0600
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_PYTHON_TWISTED
++	bool "python-twisted"
++	depends on BR2_PACKAGE_PYTHON
++    select BR2_PACKAGE_PYTHON_ZOPEINTERFACE
++    select BR2_PACKAGE_PYTHON_PYEXPAT
++	help
++	  Twisted is an event-driven networking engine written in Python.
++
++	  http://www.twistedmatrix.com/trac/
+diff -rupN buildroot-2014.02.orig/package/python-twisted/python-twisted.mk buildroot-2014.02/package/python-twisted/python-twisted.mk
+--- buildroot-2014.02.orig/package/python-twisted/python-twisted.mk	1969-12-31 18:00:00.000000000 -0600
++++ buildroot-2014.02/package/python-twisted/python-twisted.mk	2014-03-01 22:53:15.623424115 -0600
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# python-twisted
++#
++################################################################################
++
++PYTHON_TWISTED_VERSION = 13.2.0
++PYTHON_TWISTED_SOURCE = Twisted-$(PYTHON_TWISTED_VERSION).tar.bz2
++PYTHON_TWISTED_SITE = http://pypi.python.org/packages/source/T/Twisted
++PYTHON_TWISTED_LICENSE = MIT
++PYTHON_TWISTED_DEPENDENCIES = python-zopeinterface host-python-zopeinterface
++PYTHON_TWISTED_SETUP_TYPE = setuptools
++
++$(eval $(python-package))
++$(eval $(host-python-package))
+diff -rupN buildroot-2014.02.orig/package/python-werkzeug/Config.in buildroot-2014.02/package/python-werkzeug/Config.in
+--- buildroot-2014.02.orig/package/python-werkzeug/Config.in	1969-12-31 18:00:00.000000000 -0600
++++ buildroot-2014.02/package/python-werkzeug/Config.in	2014-03-01 22:53:46.399423773 -0600
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_WERKZEUG
++	bool "python-werkzeug"
++	depends on BR2_PACKAGE_PYTHON
++	help
++	  Werkzeug is a WSGI utility for Python.
++
++	  http://werkzeug.pocoo.org/
+diff -rupN buildroot-2014.02.orig/package/python-werkzeug/python-werkzeug.mk buildroot-2014.02/package/python-werkzeug/python-werkzeug.mk
+--- buildroot-2014.02.orig/package/python-werkzeug/python-werkzeug.mk	1969-12-31 18:00:00.000000000 -0600
++++ buildroot-2014.02/package/python-werkzeug/python-werkzeug.mk	2014-03-01 22:53:46.399423773 -0600
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-werkzeug
++#
++################################################################################
++
++PYTHON_WERKZEUG_VERSION = 0.9.4
++PYTHON_WERKZEUG_SOURCE = Werkzeug-$(PYTHON_WERKZEUG_VERSION).tar.gz
++PYTHON_WERKZEUG_SITE = http://pypi.python.org/packages/source/W/Werkzeug
++PYTHON_WERKZEUG_LICENSE = BSD
++PYTHON_WERKZEUG_SETUP_TYPE = setuptools
++
++$(eval $(python-package))
++$(eval $(host-python-package))
+diff -rupN buildroot-2014.02.orig/package/python-zopeinterface/Config.in buildroot-2014.02/package/python-zopeinterface/Config.in
+--- buildroot-2014.02.orig/package/python-zopeinterface/Config.in	1969-12-31 18:00:00.000000000 -0600
++++ buildroot-2014.02/package/python-zopeinterface/Config.in	2014-03-01 22:53:25.643424004 -0600
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_ZOPEINTERFACE
++	bool "python-zopeinterface"
++	depends on BR2_PACKAGE_PYTHON
++	help
++	  Interfaces for Python.
++
++	  http://www.pypi.python.org/pypi/zope.interface
+diff -rupN buildroot-2014.02.orig/package/python-zopeinterface/python-zopeinterface.mk buildroot-2014.02/package/python-zopeinterface/python-zopeinterface.mk
+--- buildroot-2014.02.orig/package/python-zopeinterface/python-zopeinterface.mk	1969-12-31 18:00:00.000000000 -0600
++++ buildroot-2014.02/package/python-zopeinterface/python-zopeinterface.mk	2014-03-01 22:53:25.643424004 -0600
+@@ -0,0 +1,19 @@
++################################################################################
++#
++# python-zopeinterface
++#
++################################################################################
++
++PYTHON_ZOPEINTERFACE_VERSION = 4.1.0
++PYTHON_ZOPEINTERFACE_SOURCE = zope.interface-$(PYTHON_ZOPEINTERFACE_VERSION).tar.gz
++PYTHON_ZOPEINTERFACE_SITE = http://pypi.python.org/packages/source/z/zope.interface
++PYTHON_ZOPEINTERFACE_SETUP_TYPE = distutils
++
++define PYTHON_ZOPEINTERFACE_INSTALL_TARGET_CMDS
++	(cd $(@D); \
++    PYTHONPATH="$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages" \
++    $(HOST_DIR)/usr/bin/python setup.py install --prefix=$(TARGET_DIR)/usr)
++endef
++
++$(eval $(python-package))
++$(eval $(host-python-package))

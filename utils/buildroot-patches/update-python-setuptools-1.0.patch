@@ -1,0 +1,144 @@
+Update package python-setuptools from version 0.6.36 to version 1.0.
+
+Signed-off-by: Adolfo Garcia <adolfo.garcia.cr@gmail.com>
+
+diff -rupN buildroot-2014.02.orig/package/python-setuptools/python-setuptools-0-addexecutable.patch buildroot-2014.02/package/python-setuptools/python-setuptools-0-addexecutable.patch
+--- buildroot-2014.02.orig/package/python-setuptools/python-setuptools-0-addexecutable.patch	1969-12-31 18:00:00.000000000 -0600
++++ buildroot-2014.02/package/python-setuptools/python-setuptools-0-addexecutable.patch	2014-03-01 20:59:25.991500014 -0600
+@@ -0,0 +1,53 @@
++Add a new --executable option to setuptools so that we can
++force the shebang line in installed python scripts.
++
++Update from setuptools version 0.6.36 to version 1.0,
++based on the work of Gustavo Zacarias <gustavo@zacarias.com.ar>.
++
++Signed-off-by: Adolfo Garcia <adolfo.garcia.cr@gmail.com>
++
++diff -purN setuptools-1.0.orig/setuptools/command/install.py setuptools-1.0/setuptools/command/install.py
++--- setuptools-1.0.orig/setuptools/command/install.py	2013-08-10 06:43:03.000000000 -0600
+++++ setuptools-1.0/setuptools/command/install.py	2014-02-25 16:59:10.578755286 -0600
++@@ -6,6 +6,7 @@ class install(_install):
++     """Use easy_install to install the package, w/dependencies"""
++ 
++     user_options = _install.user_options + [
+++        ('executable=', 'e', "specify final destination interpreter path"),
++         ('old-and-unmanageable', None, "Try not to use this!"),
++         ('single-version-externally-managed', None,
++             "used by system package builders to create 'flat' eggs"),
++@@ -21,6 +22,7 @@ class install(_install):
++ 
++     def initialize_options(self):
++         _install.initialize_options(self)
+++        self.executable = None
++         self.old_and_unmanageable = None
++         self.single_version_externally_managed = None
++         self.no_compile = None  # make DISTUTILS_DEBUG work right!
++diff -purN setuptools-1.0.orig/setuptools/command/install_scripts.py setuptools-1.0/setuptools/command/install_scripts.py
++--- setuptools-1.0.orig/setuptools/command/install_scripts.py	2013-08-10 06:43:03.000000000 -0600
+++++ setuptools-1.0/setuptools/command/install_scripts.py	2014-02-25 16:59:19.190754917 -0600
++@@ -10,6 +10,13 @@ class install_scripts(_install_scripts):
++     def initialize_options(self):
++         _install_scripts.initialize_options(self)
++         self.no_ep = False
+++        self.executable = None
+++
+++    def finalize_options(self):
+++        _install_scripts.finalize_options(self)
+++        self.set_undefined_options('install',
+++            ('executable', 'executable')
+++        )
++ 
++     def run(self):
++         from setuptools.command.easy_install import get_script_args
++@@ -31,6 +38,8 @@ class install_scripts(_install_scripts):
++         )
++         bs_cmd = self.get_finalized_command('build_scripts')
++         executable = getattr(bs_cmd,'executable',sys_executable)
+++        if self.executable is not None:
+++            executable = self.executable
++         is_wininst = getattr(
++             self.get_finalized_command("bdist_wininst"), '_is_running', False
++         )
+diff -rupN buildroot-2014.02.orig/package/python-setuptools/python-setuptools-add-executable.patch buildroot-2014.02/package/python-setuptools/python-setuptools-add-executable.patch
+--- buildroot-2014.02.orig/package/python-setuptools/python-setuptools-add-executable.patch	2014-03-01 20:55:20.359502744 -0600
++++ buildroot-2014.02/package/python-setuptools/python-setuptools-add-executable.patch	1969-12-31 18:00:00.000000000 -0600
+@@ -1,50 +0,0 @@
+-Add a new --executable option to distribute so that we can
+-force the shebang line in installed python scripts.
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-
+-diff -Nura distribute-0.6.36.orig/setuptools/command/install.py distribute-0.6.36/setuptools/command/install.py
+---- distribute-0.6.36.orig/setuptools/command/install.py	2013-04-13 09:46:23.160823598 -0300
+-+++ distribute-0.6.36/setuptools/command/install.py	2013-04-13 11:17:28.418841986 -0300
+-@@ -6,6 +6,7 @@
+-     """Use easy_install to install the package, w/dependencies"""
+-
+-     user_options = _install.user_options + [
+-+        ('executable=', 'e', "specify final destination interpreter path"),
+-         ('old-and-unmanageable', None, "Try not to use this!"),
+-         ('single-version-externally-managed', None,
+-             "used by system package builders to create 'flat' eggs"),
+-@@ -21,6 +22,7 @@
+-
+-     def initialize_options(self):
+-         _install.initialize_options(self)
+-+        self.executable = None
+-         self.old_and_unmanageable = None
+-         self.single_version_externally_managed = None
+-         self.no_compile = None  # make DISTUTILS_DEBUG work right!
+-diff -Nura distribute-0.6.36.orig/setuptools/command/install_scripts.py distribute-0.6.36/setuptools/command/install_scripts.py
+---- distribute-0.6.36.orig/setuptools/command/install_scripts.py	2013-04-13 09:46:23.160823598 -0300
+-+++ distribute-0.6.36/setuptools/command/install_scripts.py	2013-04-13 11:24:32.305416400 -0300
+-@@ -10,6 +10,13 @@
+-     def initialize_options(self):
+-         _install_scripts.initialize_options(self)
+-         self.no_ep = False
+-+        self.executable = None
+-+
+-+    def finalize_options(self):
+-+        _install_scripts.finalize_options(self)
+-+        self.set_undefined_options('install',
+-+          ('executable','executable')
+-+        )
+-
+-     def run(self):
+-         from setuptools.command.easy_install import get_script_args
+-@@ -31,6 +38,8 @@
+-         )
+-         bs_cmd = self.get_finalized_command('build_scripts')
+-         executable = getattr(bs_cmd,'executable',sys_executable)
+-+        if self.executable is not None:
+-+          executable = self.executable
+-         is_wininst = getattr(
+-             self.get_finalized_command("bdist_wininst"), '_is_running', False
+-         )
+diff -rupN buildroot-2014.02.orig/package/python-setuptools/python-setuptools.mk buildroot-2014.02/package/python-setuptools/python-setuptools.mk
+--- buildroot-2014.02.orig/package/python-setuptools/python-setuptools.mk	2014-03-01 20:55:20.359502744 -0600
++++ buildroot-2014.02/package/python-setuptools/python-setuptools.mk	2014-03-01 20:56:15.931502126 -0600
+@@ -4,15 +4,17 @@
+ #
+ ################################################################################
+ 
+-# "distribute" is a fork of the unmaintained setuptools package. There
+-# are plans to re-merge it into setuptools; if this happens, we can
+-# switch back to it.
+-# See http://pypi.python.org/packages/source/s/setuptools
++PYTHON_SETUPTOOLS_VERSION = 1.0
++PYTHON_SETUPTOOLS_SOURCE = setuptools-$(PYTHON_SETUPTOOLS_VERSION).tar.gz
++PYTHON_SETUPTOOLS_SITE = http://pypi.python.org/packages/source/s/setuptools
++PYTHON_SETUPTOOLS_DEPENDENCIES = python
++PYTHON_SETUPTOOLS_SETUP_TYPE = distutils
+ 
+-PYTHON_SETUPTOOLS_VERSION = 0.6.36
+-PYTHON_SETUPTOOLS_SOURCE  = distribute-$(PYTHON_SETUPTOOLS_VERSION).tar.gz
+-PYTHON_SETUPTOOLS_SITE    = http://pypi.python.org/packages/source/d/distribute
+-PYTHON_SETUPTOOLS_SETUP_TYPE = setuptools
++define PYTHON_SETUPTOOLS_INSTALL_TARGET_CMDS
++	(cd $(@D); \
++    PYTHONPATH="$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages" \
++    $(HOST_DIR)/usr/bin/python setup.py install --prefix=$(TARGET_DIR)/usr)
++endef
+ 
+ $(eval $(python-package))
+ $(eval $(host-python-package))

@@ -1,0 +1,53 @@
+Adds the package python-autobahn.
+
+Signed-off-by: Adolfo Garcia <adolfo.garcia.cr@gmail.com>
+
+diff -rupN buildroot-2014.02.orig/package/Config.in buildroot-2014.02/package/Config.in
+--- buildroot-2014.02.orig/package/Config.in	2014-03-15 18:01:37.040951915 -0600
++++ buildroot-2014.02/package/Config.in	2014-03-15 18:17:23.301542749 -0600
+@@ -398,6 +398,7 @@ source "package/php/Config.in"
+ source "package/python/Config.in"
+ if BR2_PACKAGE_PYTHON
+ menu "external python modules"
++source "package/python-autobahn/Config.in"
+ source "package/python-bottle/Config.in"
+ source "package/python-configobj/Config.in"
+ source "package/python-crc16/Config.in"
+diff -rupN buildroot-2014.02.orig/package/python-autobahn/Config.in buildroot-2014.02/package/python-autobahn/Config.in
+--- buildroot-2014.02.orig/package/python-autobahn/Config.in	1969-12-31 18:00:00.000000000 -0600
++++ buildroot-2014.02/package/python-autobahn/Config.in	2014-03-15 18:02:06.595721141 -0600
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_PYTHON_AUTOBAHN
++	bool "python-autobahn"
++	depends on BR2_PACKAGE_PYTHON
++    select BR2_PACKAGE_PYTHON_BZIP2
++    select BR2_PACKAGE_PYTHON_TWISTED
++	help
++	  Autobahn provides an implementation of the WebSocket protocol.
++
++	  http://autobahn.ws
+diff -rupN buildroot-2014.02.orig/package/python-autobahn/python-autobahn.mk buildroot-2014.02/package/python-autobahn/python-autobahn.mk
+--- buildroot-2014.02.orig/package/python-autobahn/python-autobahn.mk	1969-12-31 18:00:00.000000000 -0600
++++ buildroot-2014.02/package/python-autobahn/python-autobahn.mk	2014-03-15 18:41:33.331665442 -0600
+@@ -0,0 +1,21 @@
++################################################################################
++#
++# python-autobahn
++#
++################################################################################
++
++PYTHON_AUTOBAHN_VERSION = v0.8.4
++PYTHON_AUTOBAHN_SITE = $(call github,tavendo,AutobahnPython,$(PYTHON_AUTOBAHN_VERSION))
++PYTHON_AUTOBAHN_SETUP_TYPE = setuptools
++PYTHON_AUTOBAHN_DEPENDENCIES = python-twisted host-python-twisted
++
++define PYTHON_AUTOBAHN_CHANGE_DIR
++    mv -v $(@D)/autobahn $(@D)/autobahn-src
++    mv -v $(@D)/autobahn-src/* $(@D)
++    rm -r $(@D)/autobahn-src
++endef
++
++PYTHON_AUTOBAHN_PRE_CONFIGURE_HOOKS += PYTHON_AUTOBAHN_CHANGE_DIR
++
++$(eval $(python-package))
++$(eval $(host-python-package))
