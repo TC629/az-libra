@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div>
+    <table class="table">
+    <tr><th>Producto</th><th>&nbsp;</th></tr>
+    {% for product in products %}
+        <tr><td>{{ product[1] }}</td><td><a href="{{ url_for('product', id=product[0]) }}">Ver detalle</a></td></tr>
+    {% endfor %}
+    </table>
+</div>
+
+<div>
+    <ul class="pagination">
+        {% if pagination.pages > 1%}
+            {% for page in pagination.iter_pages(): %}
+                {% if page %}
+                    {% if page != pagination.page %}
+                        <li><a href="{{ url_for('products', page=page) }}">{{ page }}</a></li>
+                    {% else %}
+                        <li class="active"><a href="#">{{ page }} <span class="sr-only">(actual)</span></a></li>
+                    {% endif %}
+                {% else %}
+                    <li class="disabled"><a href="#">...</a></li>
+                {% endif %}
+            {% endfor %}
+            {% if pagination.hasNext %}
+                <li><a href="{{ url_for('products', page=pagination.page+1) }}">&raquo;</a></li>
+            {% endif %}
+        {% endif %}
+    </ul>
+</div>
+
+{% endblock %}
+
+{% block additionaljs %}
+{% endblock %}

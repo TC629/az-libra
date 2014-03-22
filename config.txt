@@ -1,0 +1,45 @@
+##################################################
+# No se recomienda cambiar los siguientes valores.
+##################################################
+
+DBNAME='libra.sqlite3'
+ARDUINO_PORT='/dev/ttyACM0'
+ARDUINO_BAUDRATE=9600
+SERVER_INTERFACE='0.0.0.0'
+SERVER_MAX_THREADS=8
+LCD_PORT='/dev/ttyS1'
+LCD_BAUDRATE=9600
+
+##########################################################################
+# Dejar los valores por defecto, solo actualizarlos desde la interfaz web.
+##########################################################################
+CURRENT_PRODUCT=1
+
+NC_TYPE='dynamic'
+
+# Si alguien tiene acceso a este archivo puede sustituir los valores
+# (hexdigests de SHA512). Se utiliza el hashing para cuidar la privacidad
+# de aquellos usuarios que reutilizan passwords.
+WEB_USERNAME='5e7951aa8f403ff16d0cd453e7d86ee0c99ce5319e01836333b6ba398a20494d7f3e76397e3d99e8fc4702ba7cfd7600d453958c755000cc31ce0150ac819f9e'
+WEB_PASSWORD='0a50261ebd1a390fed2bf326f2673c145582a6342d523204973d0219337f81616a8069b012587cf5635f6925f1b56c360230c19b273500ee013e030601bf2425'
+
+########################################
+# Cambiar estos valores para produccion:
+########################################
+DEBUG=True
+TESTING=True
+DEVELOPMENT=True
+
+SERVER_PORT=8080
+
+NC_WPA_SSID=foo
+NC_WPA_PSK=bar
+
+SECRET_KEY='ddc2d1be-2b4f-44b5-96eb-444357830507'
+
+#################################
+# Indiferente si se cambian o no:
+#################################
+
+# Atencion: PRODUCTS_PER_PAGE > 0
+PRODUCTS_PER_PAGE=25

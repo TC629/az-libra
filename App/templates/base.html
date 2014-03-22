@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE-edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1"> 
+    <title>{{ title }} - Prototipo Libra</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/font-awesome.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/custom.css') }}" rel="stylesheet">
+</head>
+
+<body>
+    <div id="wrapper">
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand"><a href="{{ url_for('index') }}">Libra</a></li>
+                <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+                <li><a href="{{ url_for('products') }}">Productos</a></li>
+                <li><a href="{{ url_for('update') }}">Actualizar</a></li>
+                <li><a href="{{ url_for('logout') }}">Salir</a></li>
+            </ul>
+        </div>
+        <div id="page-content-wrapper">
+            <div class="content-header">
+                <h1>{{ title }}</h1>
+            </div>
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <div id="flashes" style="padding: 10px;">
+            {% for message in messages %}
+                <div class="alert alert-warning">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    {{ message }}
+                </div> 
+            {% endfor %}
+            </div>
+            {% endif %}
+            {% endwith %}
+            <div class="page-content inset">
+                {% block content %}
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/jquery-2.1.0.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+
+    {% block additionaljs %}
+    {% endblock %}
+
+</body>
+
+</html>

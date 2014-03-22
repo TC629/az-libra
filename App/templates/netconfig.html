@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block content %}
+<p class="bg-info" style="padding:10px;">
+    <strong>Atenci&oacute;n:</strong>&nbsp;si actualiza la configuraci&oacute;n de red, el dispositivo se reiniciar&aacute;.
+</p>
+<div class="panel panel-default">
+    <div class="panel-heading">Direcciones f&iacute;sicas</div>
+    <div class="panel-body">
+        <table class="table">
+        <tr><th>Tipo</th><th>Direcci&oacute;n</th><th>Interfaz</th></tr>
+        {% for name,description,mac in macs %}
+        <tr>
+        <td>{{ description }}</td>
+        <td>{{ mac }}&nbsp;</td>
+        <td><span class="label {%if name == interface %}label-success{%else%}label-default{%endif%}">{{ name }}</span></td>
+        </tr>
+        {% endfor %}
+        </table>
+    </div>
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading">Configuraci&oacute;n general</div>
+    <div class="panel-body">
+        <div style="max-width:300px;">
+            <form action="" method="post">
+                <h3>General</h3>
+                <div class="form-group">
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="netType" value="dynamic" {%if netType == 'dynamic'%}checked{%endif%}>
+                            Din&aacute;mica
+                        </label>
+                    </div>
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="netType" value="static" {%if netType == 'static'%}checked{%endif%}>
+                            Est&aacute;tica
+                        </label>
+                    </div>
+                </div>
+                <fieldset id="netconfig" {%if netType == 'dynamic'%}disabled{%endif%}>
+                    <div class="form-group">
+                        <label for="address">Direcci&oacute;n</label>
+                        <input type="text" class="form-control" name="address" id="address" value="{{ address }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="network">Direcci&oacute;n de red</label>
+                        <input type="text" class="form-control" name="network" id="network" value="{{ network }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="netmask">M&aacute;scara de red</label>
+                        <input type="text" class="form-control" name="netmask" id="netmask" value="{{ netmask }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="broadcast">Direcci&oacute;n de broadcast</label>
+                        <input type="text" class="form-control" name="broadcast" id="broadcast" value="{{ broadcast }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="gateway">Direcci&oacute;n del gateway</label>
+                        <input type="text" class="form-control" name="gateway" id="gateway" value="{{ gateway }}">
+                    </div>
+                </fieldset>
+                <h3>Red inal&aacute;mbrica</h3>
+                <fieldset id="wpaconfig">
+                    <div class="form-group">
+                        <label for="ssid">Nombre de la red inal&aacute;mbrica (SSID)</label>
+                        <input type="text" class="form-control" name="ssid" id="ssid" value="{{ ssid }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="psk">Password de la red inal&aacute;mbrica</label>
+                        <input type="text" class="form-control" name="psk" id="psk" value="{{ psk }}">
+                    </div>
+                </fieldset>
+                <button type="submit" class="btn btn-default">Actualizar y reiniciar</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block additionaljs %}
+    <script>
+        $(document).ready(function() {
+            $("input[name=netType]").change(netTypeChanged);
+        });
+
+        function netTypeChanged() {
+            var netType = $("input:radio[name='netType']:checked").val();
+            if('static' == netType) {
+                $("#netconfig").removeAttr("disabled");
+            }
+            else {
+                $("#netconfig").attr("disabled", "true");
+            }
+        }
+    </script>
+{% endblock %}

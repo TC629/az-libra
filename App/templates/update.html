@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+<p class="bg-info" style="padding:10px;">
+    <strong>Atenci&oacute;n:</strong>&nbsp;una vez subido el archivo, el dispositivo se reiniciar&aacute;.
+</p>
+<form action="" method="post" enctype="multipart/form-data">
+    <div class="well">
+        <div class="form-group">
+            <label for="tarball">Elija el archivo de actualizaci&oacute;n:</label>
+            <input type="file" name="tarball">
+        </div>
+    </div>
+    <input class="btn btn-default" type="submit" value="Actualizar y reiniciar">
+</form>
+{% endblock %}

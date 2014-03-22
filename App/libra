@@ -1,0 +1,3 @@
+#!/bin/sh
+
+python /opt/libra/app.py
