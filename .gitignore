@@ -1,36 +1,23 @@
-*.py[cod]
-
-# C extensions
-*.so
-
-# Packages
-*.egg
-*.egg-info
-dist
-build
-eggs
-parts
-bin
-var
-sdist
-develop-eggs
-.installed.cfg
-lib
-lib64
-__pycache__
-
-# Installer logs
-pip-log.txt
-
-# Unit test / coverage reports
-.coverage
-.tox
-nosetests.xml
-
-# Translations
-*.mo
-
-# Mr Developer
-.mr.developer.cfg
-.project
-.pydevproject
+*.swp
+*.sqlite3
+.arduino-tools
+.arduino-build
+output
+*.d
+*.o
+*.a
+*.hex
+*.eep
+*.elf
+*.tar.gz
+*.pyc
+update_pending
+avrdude_config
+utils/ctng
+utils/arm-toolchain-build
+utils/linux-sunxi
+utils/u-boot-sunxi
+utils/sunxi-tools
+utils/buildroot
+utils/pythonenv
+rootfs-additions
