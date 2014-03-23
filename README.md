@@ -67,8 +67,7 @@ Revise los archivos para más información de lo que sucede en este paso.
 
 ##Uso del *Makefile*
 
-Se provee un *Makefile* para asistir el proceso de desarrollo
-de la aplicación, a continuación se describen algunos de los comandos.
+Se provee un *Makefile* para asistir el proceso de desarrollo de la aplicación, a continuación se describen algunos de los comandos.
 Ejecute ```make help``` para obtener información de referencia más reciente.
 
 | Comando | Descripción |
@@ -86,26 +85,18 @@ Ejecute ```make help``` para obtener información de referencia más reciente.
 | make print-hexsize | Muestra el tamaño total en bytes del código de Arduino. |
 | make update | Simula una actualización en la computadora de desarrollo. |
 
-##Corriendo la aplicación en la máquina de desarrollo
-
-Para correr la aplicación en la máquina de desarrollo necesita
-conectar el Arduino a la misma e instalar la aplicación utilizando *make*.
-Luego nada más ejecute ```/opt/libra/libra```.
+##Probando la aplicación
+Es importante poder correr la aplicación desde la máquina de desarrollo (para agilizar el proceso). El *Makefile* provee facilidades para esto. Instale la aplicación localmente haciendo ```make install```, este paso requiere que tenga privilegios para ejecutar el comando *sudo*. La aplicación se instalará en los directorios */var/libra* y /opt/libra*. Ejecute la aplicación haciendo ```/opt/libra/libra```, la aplicación estará disponible en el puerto 8080.
 
 ##Utilizando *Buildroot*
-Es necesario crear (o re-generar) el directorio *rootfs-additions*.
-Para ello ejecute ````make build-rootfs-additions````.
-Luego haga *utils/buildroot/* su directorio de trabajo.
-Ejecute ```make```.
-Después de completado el proceso de construcción, encontrará
-los archivos necesarios para crear la tarjeta SD en el directorio
-*utils/buildroot/output/images*.
+En esta sección se explica como utilizar Buildroot para crear las imagenes que se instalaran en la tarjeta SD. Lo primero que debe hacer es crear (o re-generar) el directorio *rootfs-additions*. Esto se hace ejecutando ````make build-rootfs-additions````.
+Luego haga *utils/buildroot/* su directorio de trabajo y ejecute ```make```. Después de completado el proceso de construcción, encontrará los archivos necesarios para crear la tarjeta SD en el directorio *utils/buildroot/output/images*.
 
 ##Creando una tarjeta SD con la aplicación
 
 En esta sección se explica el proceso de creación de una tarjeta SD. Se asume que la computadora a utilizar tiene lector de memorias SD.
-Si se utiliza un lector externo (USB) los pasos son los mismos pero debera sustituir los nombres */dev/mmcblk* con alguno de la forma */dev/sd*. También se asume que la tarjeta SD tiene una capacidad de 8GB. Si utiliza alguna con capacidad distinta, solo debe cambiar el paso
-7.13, de manera que quede espacio de 512MB para una particion *SWAP*. Se recomienda que la tarjeta sea de al menos 4GB y que sea **SDHC**.
+Si se utiliza un lector externo (USB) los pasos son los mismos pero deberá sustituir los nombres */dev/mmcblk* con alguno de la forma */dev/sd*. También se asume que la tarjeta SD tiene una capacidad de 8GB. Si utiliza alguna con capacidad distinta, solo debe cambiar el paso
+7.13, de manera que quede espacio de 512MB para una partición *SWAP*. Se recomienda que la tarjeta sea de al menos 4GB y que sea **SDHC**.
 
 ###Layout de la tarjeta
 | Sector | Start | Size | Use                                                 |
@@ -221,7 +212,7 @@ Si se utiliza un lector externo (USB) los pasos son los mismos pero debera susti
     ````
 
 ##Referencias
-En esta sección se listan fuentes de información que han consultado en el proceso de desarrollo, las mismas se dividen por tema.
+En esta sección se listan fuentes de información que se han consultado en el proceso de desarrollo, las mismas se dividen por tema.
 
 ###Buildroot
 - [The Buildroot user manual](http://buildroot.uclibc.org/downloads/manual/manual.html)
