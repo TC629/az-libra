@@ -1,0 +1,27 @@
+#!/bin/sh
+#
+# Inicia la aplicacion Libra
+#
+
+case "$1" in
+  start)
+ 	echo "Iniciando Libra"
+    start-stop-daemon --start --make-pidfile --pidfile /var/run/libra.pid --background --exec /opt/libra/libra
+    echo "OK"
+	;;
+  stop)
+	echo -n "Deteniendo Libra"
+    start-stop-daemon --stop --pidfile /var/run/libra.pid
+    echo "OK"
+	;;
+  restart|reload)
+	"$0" stop
+	"$0" start
+	;;
+  *)
+	echo "Usage: $0 {start|stop|restart}"
+	exit 1
+esac
+
+exit $?
+

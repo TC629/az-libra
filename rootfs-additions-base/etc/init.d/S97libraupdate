@@ -1,0 +1,20 @@
+#!/bin/sh
+#
+# Corre la aplicacion de actualizacion de Libra
+#
+
+case "$1" in
+  start)
+    /opt/libra/update.py
+	;;
+  stop)
+	;;
+  restart|reload)
+	;;
+  *)
+	echo "Usage: $0 {start}"
+	exit 1
+esac
+
+exit $?
+
