@@ -127,26 +127,32 @@ Se recomienda que la tarjeta sea de al menos 4GB y que sea **SDHC**.
 
 ###Instrucciones
 1. haga *"utils/buildroot/output/images"* su directorio de trabajo.
+
 2. ejecute
     ````
         sudo su
     ````
+
 3. ejecute
     ````
         dd if=/dev/zero of=/dev/mmcblk0 bs=1024 count=32768
     ````
+
 4. ejecute
     ````
         dd if=sunxi-spl.bin of=/dev/mmcblk0 bs=1024 seek=8
     ````
+
 5. ejecute
     ````
         dd if=u-boot.img of=/dev/mmcblk0 bs=1024 seek=40
     ````
+
 6. ejecute
     ````
         fdisk /dev/mmcblk0
     ````
+
 7. Utilizando la consola de *fdisk* haga:
     - 7.1.  **n**
     - 7.2.  **p**
