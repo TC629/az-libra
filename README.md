@@ -103,14 +103,9 @@ los archivos necesarios para crear la tarjeta SD en el directorio
 
 ##Creando una tarjeta SD con la aplicación
 
-Se asume que la computadora a utilizar tiene lector de memorias SD.
-Si se utiliza un lector externo (USB) los pasos son los mismos pero 
-debera sustituir los nombres */dev/mmcblk* con alguno de la forma
-*/dev/sd*.
-Tambien se asume que la tarjeta SD tiene una capacidad de 8GB.
-Si utiliza alguna con capacidad distinta, solo debe cambiar el paso
-7.13, de manera que quede espacio de 512MB para una particion *SWAP*.
-Se recomienda que la tarjeta sea de al menos 4GB y que sea **SDHC**.
+En esta sección se explica el proceso de creación de una tarjeta SD. Se asume que la computadora a utilizar tiene lector de memorias SD.
+Si se utiliza un lector externo (USB) los pasos son los mismos pero debera sustituir los nombres */dev/mmcblk* con alguno de la forma */dev/sd*. También se asume que la tarjeta SD tiene una capacidad de 8GB. Si utiliza alguna con capacidad distinta, solo debe cambiar el paso
+7.13, de manera que quede espacio de 512MB para una particion *SWAP*. Se recomienda que la tarjeta sea de al menos 4GB y que sea **SDHC**.
 
 ###Layout de la tarjeta
 | Sector | Start | Size | Use                                                 |
@@ -126,29 +121,29 @@ Se recomienda que la tarjeta sea de al menos 4GB y que sea **SDHC**.
 **Tomado de:** [*Storage Map, U-Boot-Sunxi Wiki*](https://github.com/linux-sunxi/u-boot-sunxi/wiki)
 
 ###Instrucciones
-1. haga *"utils/buildroot/output/images"* su directorio de trabajo.
+1. Haga *"utils/buildroot/output/images"* su directorio de trabajo.
 
-2. ejecute
+2. Ejecute:
     ````
         sudo su
     ````
 
-3. ejecute
+3. Ejecute:
     ````
         dd if=/dev/zero of=/dev/mmcblk0 bs=1024 count=32768
     ````
 
-4. ejecute
+4. Ejecute:
     ````
         dd if=sunxi-spl.bin of=/dev/mmcblk0 bs=1024 seek=8
     ````
 
-5. ejecute
+5. Ejecute:
     ````
         dd if=u-boot.img of=/dev/mmcblk0 bs=1024 seek=40
     ````
 
-6. ejecute
+6. Ejecute:
     ````
         fdisk /dev/mmcblk0
     ````
@@ -180,18 +175,18 @@ Se recomienda que la tarjeta sea de al menos 4GB y que sea **SDHC**.
     - 7.23. **82**
     - 7.24. **w**
 
-8. ejecute
+8. Ejecute:
     ````
         mkfs.ext2 /dev/mmcblk0p1
         mkfs.ext4 /dev/mmcblk0p2
     ````
 
-9. ejecute
+9. Ejecute:
     ````
         mount /dev/mmcblk0p1 /mnt
     ````
 
-10. ejecute
+10. Ejecute:
     ````
         cp uImage /mnt
         cp script.bin /mnt
@@ -199,28 +194,28 @@ Se recomienda que la tarjeta sea de al menos 4GB y que sea **SDHC**.
         sync
     ````
 
-11. ejecute
+11. Ejecute:
     ````
         umount /mnt
     ````
 
-12. ejecute
+12. Ejecute:
     ````
         mount /dev/mmcblk0p2 /mnt
     ````
 
-13. ejecute
+13. Ejecute:
     ````
         tar -C /mnt -xjpf rootfs.tar.bz2
         sync
     ````
 
-14. ejecute
+14. Ejecute:
     ````
         umount /mnt
     ````
 
-15. ejecute
+15. Ejecute:
     ````
         exit
     ````
