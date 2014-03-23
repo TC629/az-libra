@@ -1,7 +1,8 @@
 #Proyecto TCU-TC629-AZ
 
 ##Estado
-**En desarrollo.**
+**En desarrollo**
+###Pendientes
 
 ##Introducción
 
@@ -174,9 +175,7 @@ Se recomienda que la tarjeta sea de al menos 4GB y que sea **SDHC**.
     - 7.24. **w**
 
 8. ejecute
-    ````
-        mkfs.ext2 /dev/mmcblk0p1 &&
-        mkfs.ext4 /dev/mmcblk0p2
+    ````mkfs.ext2 /dev/mmcblk0p1 && mkfs.ext4 /dev/mmcblk0p2
     ````
 9. ejecute
     ````
@@ -211,4 +210,22 @@ Se recomienda que la tarjeta sea de al menos 4GB y que sea **SDHC**.
         exit
     ````
 
-##Pendientes
+##Referencias
+En esta sección se listan fuentes de información que han consultado en el proceso de desarrollo, las mismas se dividen por tema.
+###Buildroot
+- [The Buildroot user manual](http://buildroot.uclibc.org/downloads/manual/manual.html)
+- [Using Buildroot for real projects](http://elinux.org/images/2/2a/Using-buildroot-real-project.pdf)
+###Crosstool-NG
+- [CrosstoolNG - Linaro Wiki](https://wiki.linaro.org/WorkingGroups/ToolChain/Using/CrosstoolNg) 
+- [CroostoolNG Download and Usage](http://crosstool-ng.org/#download_and_usage)
+###Miscelaneas
+- [a13-olinuxino Buildroot configuration](http://code.google.com/p/a13-olinuxino/wiki/BuildRootConfig)
+- [Creating a bootable SD card for the pcDuino - pcduino.com](http://pcduino.com/forum/index.php?topic=3642.0)
+- [MDev Primer](http://svn.mcs.anl.gov/repos/ZeptoOS/trunk/BGP/packages/busybox/src/docs/mdev.txt)
+- [The Linux BootPrompt HowTo](http://www.tldp.org/HOWTO/BootPrompt-HOWTO-3.html)
+###Python Twisted
+- [The Twisted Documentation](http://twistedmatrix.com/documents/current/core/howto/book.pdf)
+- [Using processes](http://twistedmatrix.com/documents/current/core/howto/process.html)
+###U-Boot
+- [U-Boot Sunxi](http://linux-sunxi.org/U-Boot)
+- [u-boot-sunxi Wiki](http://github.com/linux-sunxi/u-boot-sunxi/wiki)
