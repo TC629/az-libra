@@ -176,19 +176,20 @@ Se recomienda que la tarjeta sea de al menos 4GB y que sea **SDHC**.
 
 8. ejecute
     ````
-        mkfs.ext2 /dev/mmcblk0p1 && mkfs.ext4 /dev/mmcblk0p2
+        mkfs.ext2 /dev/mmcblk0p1
+        mkfs.ext4 /dev/mmcblk0p2
     ````
 
 9. ejecute
     ````
-        mount /dev/mmcblk0p1 /mnt &&
+        mount /dev/mmcblk0p1 /mnt
     ````
 
 10. ejecute
     ````
-        cp uImage /mnt &&
-        cp script.bin /mnt &&
-        cp boot.src /mnt &&
+        cp uImage /mnt
+        cp script.bin /mnt
+        cp boot.src /mnt
         sync
     ````
 
@@ -204,7 +205,7 @@ Se recomienda que la tarjeta sea de al menos 4GB y que sea **SDHC**.
 
 13. ejecute
     ````
-        tar -C /mnt -xjpf rootfs.tar.bz2 &&
+        tar -C /mnt -xjpf rootfs.tar.bz2
         sync
     ````
 
