@@ -11,6 +11,24 @@
 
 ##Lista de materiales
 
+##Dependencias
+Libra utiliza las siguientes dependencias. Por comodidad algunas se incluyen en el repositorio y para otras se incluye un *script* para descargarlas e instalarlas. Por favor refiérase a los sitios oficiales para ver las licencias de cada una.
+
+###Aplicación en Python
+- Autobahn
+- Flask
+- Jinja2
+- Twisted
+- Werkzeug
+
+###Aplicación de Arduino
+- Librerías de Arduino (ArduinoCore, ArduinoVariant)
+- ChibiOS
+
+###Otras
+- Buildroot
+- Crosstool-NG
+
 ##Preparando el ambiente de desarrollo
 
 Es necesario contar con una computadora que utilice Linux,
