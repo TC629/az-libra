@@ -15,19 +15,19 @@
 Libra utiliza las siguientes dependencias. Por comodidad algunas se incluyen en el repositorio y para otras se incluye un *script* para descargarlas e instalarlas. Por favor refiérase a los sitios oficiales para ver las licencias de cada una.
 
 ###Aplicación en Python
-- Autobahn
-- Flask
-- Jinja2
-- Twisted
-- Werkzeug
+- [Autobahn](http://github.com/tavendo/AutobahnPython)
+- [Flask](http://flask.pocoo.org/)
+- [Jinja2](http://jinja.pocoo.org/)
+- [Twisted](http://twistedmatrix.com/trac/)
+- [Werkzeug](http://werkzeug.pocoo.org/)
 
 ###Aplicación de Arduino
-- Librerías de Arduino (ArduinoCore, ArduinoVariant)
-- ChibiOS
+- [Bibliotecas de Arduino (ArduinoCore, ArduinoVariant)](http://www.arduino.cc/)
+- [ChibiOS (versión de Arduino RTOS)](http://code.google.com/p/rtoslibs/) [(*ver licencia*)](http://www.chibios.org/dokuwiki/doku.php?id=chibios:license)
 
-###Otras
-- Buildroot
-- Crosstool-NG
+###Construcción del rootfs
+- [Buildroot](http://buildroot.uclibc.org/)
+- [Crosstool-NG](http://crosstool-ng.org/)
 
 ##Preparando el ambiente de desarrollo
 
