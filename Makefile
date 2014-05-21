@@ -143,8 +143,8 @@ ROOTFS_ADDITIONS_GEN = rootfs-additions
 WPA_SUPPLICANT_SSID=tmpssid
 WPA_SUPPLICANT_PSK=tmppsk
 
-# Regla por defecto.
-all: build-tarball-with-hex
+# Regla por defecto: mostrar ayuda.
+all: help
 
 # Dependencias del codigo objeto.
 $(AVRLIBC_OBJ) : $(AVRLIBC_SRC)
@@ -298,8 +298,8 @@ clean-all: clean
 help:
 	$(info ----------------------------------------------------------------------------------) 
 	$(info Haga:)
-	$(info make all - para crear el tarball completo)
 	$(info make build-tarball - para crear el tarball sin el hexfile)
+	$(info make build-tarball-with-hex - para crear el tarball con el hexfile)
 	$(info make build-db - para recrear el archivo de bd)
 	$(info make build-hex - para compilar el codigo de Arduino)
 	$(info make build-rootfs-additions - para generar archivos adicionales del rootfs)

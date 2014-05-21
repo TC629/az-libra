@@ -33,8 +33,10 @@ Libra utiliza las siguientes dependencias. Por comodidad algunas se incluyen en 
 ##Preparando el ambiente de desarrollo
 
 Es necesario contar con una computadora que utilice Linux,
-se recomienda alguna versión reciente de Ubuntu.
-El desarrollo se hizo en una computadora con Ubuntu 13.10 x86-64.
+se recomienda alguna versión reciente de Ubuntu. 
+Se probó con las siguientes versiones:
+- 13.10 x86-64
+- 14.04 x86-64
 
 ###Instalar pre-requisitos
 
@@ -72,8 +74,8 @@ Ejecute ```make help``` para obtener información de referencia más reciente.
 
 | Comando | Descripción |
 | :-----: | :---------: |
-| make all| Crea el tarball de actualización completo. |
 | make build-tarball | Crear el tarball de actualización omitiendo el código de Arduino. |
+| make build-tarball-with-hex | Crear el tarball de actualización incluyendo el código de Arduino. |
 | make build-db | Genera el archivo de la base de datos. |
 | make build-hex | Compila el código de Arduino. |
 | make build-rootfs-additions | Genera los archivos adicionales del rootfs. |
