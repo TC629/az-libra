@@ -68,6 +68,13 @@ Revise los archivos para más información de lo que sucede en este paso.
 ./build-pythonvirtualenv.sh
 ````
 
+###Construir las herramientas de Sunxi
+Haga *"utils/sunxi-tools/"* su directorio de trabajo y corra los siguientes comandos.
+
+````
+make
+````
+
 ##Uso del *Makefile*
 
 Se provee un *Makefile* para asistir el proceso de desarrollo de la aplicación, a continuación se describen algunos de los comandos.
