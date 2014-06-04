@@ -1,0 +1,81 @@
+Adds packages python-cffi and python-pycparser.
+Signed-off-by: Adolfo Garcia <adolfo.garcia.cr@gmail.com>
+
+diff -rupN buildroot-2014.02.orig/package/Config.in buildroot-2014.02/package/Config.in
+--- buildroot-2014.02.orig/package/Config.in	2014-02-27 14:51:23.000000000 -0600
++++ buildroot-2014.02/package/Config.in	2014-06-03 20:02:27.447967545 -0600
+@@ -399,6 +399,7 @@ source "package/python/Config.in"
+ if BR2_PACKAGE_PYTHON
+ menu "external python modules"
+ source "package/python-bottle/Config.in"
++source "package/python-cffi/Config.in"
+ source "package/python-configobj/Config.in"
+ source "package/python-crc16/Config.in"
+ source "package/python-dialog/Config.in"
+@@ -415,6 +416,7 @@ source "package/python-nfc/Config.in"
+ source "package/python-posix-ipc/Config.in"
+ source "package/python-protobuf/Config.in"
+ source "package/python-pyasn/Config.in"
++source "package/python-pycparser/Config.in"
+ source "package/python-pycrypto/Config.in"
+ source "package/python-pygame/Config.in"
+ source "package/python-pyparsing/Config.in"
+diff -rupN buildroot-2014.02.orig/package/python-cffi/Config.in buildroot-2014.02/package/python-cffi/Config.in
+--- buildroot-2014.02.orig/package/python-cffi/Config.in	1969-12-31 18:00:00.000000000 -0600
++++ buildroot-2014.02/package/python-cffi/Config.in	2014-06-03 18:13:26.063713000 -0600
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_PYTHON_CFFI
++	bool "python-cffi"
++	depends on BR2_PACKAGE_PYTHON
++    select BR2_PACKAGE_LIBFFI
++    select BR2_PACKAGE_PYTHON_PYCPARSER
++	help
++	  Foreign Function Interface for Python calling C code.
++
++	  https://pypi.python.org/packages/source/c/cffi
+diff -rupN buildroot-2014.02.orig/package/python-cffi/python-cffi.mk buildroot-2014.02/package/python-cffi/python-cffi.mk
+--- buildroot-2014.02.orig/package/python-cffi/python-cffi.mk	1969-12-31 18:00:00.000000000 -0600
++++ buildroot-2014.02/package/python-cffi/python-cffi.mk	2014-06-03 18:13:43.215713000 -0600
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-cffi
++#
++################################################################################
++
++PYTHON_CFFI_VERSION = 0.8.2
++PYTHON_CFFI_SOURCE = cffi-$(PYTHON_CFFI_VERSION).tar.gz
++PYTHON_CFFI_SITE = https://pypi.python.org/packages/source/c/cffi
++PYTHON_CFFI_SETUP_TYPE = setuptools
++PYTHON_CFFI_DEPENDENCIES = libffi python-pycparser
++
++$(eval $(python-package))
++$(eval $(host-python-package))
+diff -rupN buildroot-2014.02.orig/package/python-pycparser/Config.in buildroot-2014.02/package/python-pycparser/Config.in
+--- buildroot-2014.02.orig/package/python-pycparser/Config.in	1969-12-31 18:00:00.000000000 -0600
++++ buildroot-2014.02/package/python-pycparser/Config.in	2014-06-03 18:09:37.059704000 -0600
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_PYCPARSER
++	bool "python-pycparser"
++	depends on BR2_PACKAGE_PYTHON
++	help
++	  C parser in Python.
++
++	  https://pypi.python.org/pypi/pycparser/2.10
+diff -rupN buildroot-2014.02.orig/package/python-pycparser/python-pycparser.mk buildroot-2014.02/package/python-pycparser/python-pycparser.mk
+--- buildroot-2014.02.orig/package/python-pycparser/python-pycparser.mk	1969-12-31 18:00:00.000000000 -0600
++++ buildroot-2014.02/package/python-pycparser/python-pycparser.mk	2014-06-03 18:33:23.795759000 -0600
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# python-pycparser
++#
++################################################################################
++
++PYTHON_PYCPARSER_VERSION = 2.10
++PYTHON_PYCPARSER_SOURCE = pycparser-$(PYTHON_PYCPARSER_VERSION).tar.gz
++PYTHON_PYCPARSER_SITE = $(call github,eliben,pycparser,$(PYTHON_PYCPARSER_VERSION))
++PYTHON_PYCPARSER_SETUP_TYPE = distutils
++
++$(eval $(python-package))
++$(eval $(host-python-package))
