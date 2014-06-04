@@ -54,6 +54,7 @@ apt-get install python-virtualenv
 apt-get install python-dev
 apt-get install u-boot-tools
 apt-get install libffi-dev
+apt-get install screen
 exit 
 ````
 
@@ -83,6 +84,19 @@ Esto se logra agregando el usuario al grupo *dialout*, como se muestra a continu
 
 ````
 sudo adduser `whoami` dialout
+````
+
+##Accediendo el pcDuino desde la máquina de trabajo.
+Se utiliza un cable USB-serial (3.3V) para comunicarse con el pcDuino desde la máquina de trabajo, en particular se recomienda [este cable que ofrece Olimex](https://www.olimex.com/Products/Components/Cables/USB-Serial-Cable/USB-Serial-Cable-F).
+El cable esta configurado de la siguiente manera:
+- azul = tierra
+- verde = rx
+- rojo = tx
+Los pines del pcDuino a utilizar son los identificados como J5, refierase al *pinout* para identificarlos. Recuerde que debe conectar el rx del cable con el tx del pcDuino, el tx del cable con el rx del pcDuino y conectar las tierras.
+Asumiendo que el cable es el único dispositivo USB-serial conectado a la máquina de desarrollo, ejecute el siguiente comando para iniciar la comunicación.
+
+````
+screen /dev/ttyUSB0 115200
 ````
 
 ##Uso del *Makefile*
@@ -255,3 +269,6 @@ En esta sección se listan fuentes de información que se han consultado en el p
 ###U-Boot
 - [U-Boot Sunxi](http://linux-sunxi.org/U-Boot)
 - [u-boot-sunxi Wiki](http://github.com/linux-sunxi/u-boot-sunxi/wiki)
+
+###pcDuino
+- [pcDuino pinout](http://www.robotmaker.ru/wp-content/uploads/2013/09/pcduino-pinout-300x218.jpg)
