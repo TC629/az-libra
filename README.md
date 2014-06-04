@@ -77,6 +77,14 @@ Haga *"utils/sunxi-tools/"* su directorio de trabajo y corra los siguientes coma
 make
 ````
 
+###Permitir que el usuario utilice puertos seriales
+Debido a que se utiliza un puerto serial para acceder a la consola del pcduino, el usuario debe tener permisos para ello.
+Esto se logra agregando el usuario al grupo *dialout*, como se muestra a continuación.
+
+````
+sudo adduser `whoami` dialout
+````
+
 ##Uso del *Makefile*
 
 Se provee un *Makefile* para asistir el proceso de desarrollo de la aplicación, a continuación se describen algunos de los comandos.
