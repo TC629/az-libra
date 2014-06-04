@@ -51,7 +51,9 @@ apt-get install unzip
 apt-get install libusb-1.0-0-dev
 apt-get install avrdude binutils-avr avr-libc gcc-avr
 apt-get install python-virtualenv
+apt-get install python-dev
 apt-get install u-boot-tools
+apt-get install libffi-dev
 exit 
 ````
 
