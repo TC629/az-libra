@@ -245,6 +245,16 @@ Si se utiliza un lector externo (USB) los pasos son los mismos pero deberá sust
         exit
     ````
 
+###Credenciales por defecto
+####Linux
+- usuario: root
+- password: foobar
+####Aplicación web
+- usuario: administrador
+- password: foobar
+
+Se recomienda, por supuesto, utilizar valores diferentes a los provistos por defecto.
+
 ##Referencias
 En esta sección se listan fuentes de información que se han consultado en el proceso de desarrollo, las mismas se dividen por tema.
 
