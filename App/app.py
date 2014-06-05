@@ -76,7 +76,7 @@ def main():
     # Mostramos si hay conexion a la red local.
     if not CONFIG['DEVELOPMENT']:
         if CONFIG['NC_ADDRESS'] is not None:
-            lcd.showMessage('ip {0}'.format(CONFIG['NC_ADDRESS']), 'puerto {0}'.format(CONFIG['SERVER_PORT']))
+            lcd.showMessage('{0}'.format(CONFIG['NC_ADDRESS']), '{0}'.format(CONFIG['SERVER_PORT']))
         else:
             lcd.showMessage('Desconectado')
 
