@@ -15,6 +15,11 @@
 #	"compilation" y "upload" al lado de "Show verbose output during:"
 #	en el panel de preferencias.
 
+# Las configuraciones se manejan en Config.mk
+# Los parametros ahi definidos son los que pueden variar
+# entre ambientes de desarrollo.
+include Config.mk
+
 # Configuracion del tarball
 # Se asume que el tarball se creara desde un repositorio de Git.
 VERSION = $(shell git describe --always --tag)
@@ -48,29 +53,6 @@ HEXFILE = $(ARDUINO_DIR)/libra.hex
 ELFFILE = $(ARDUINO_DIR)/libra.elf
 EEPFILE = $(ARDUINO_DIR)/libra.eep
 CORELIB = $(ARDUINO_DIR)/core.a
-
-# Configuracion del Arduino a utilizar
-# Solo se soportan el Arduino UNO y el Arduino Mega (R3).
-# Atencion: el soporte para el Arduino UNO dependera
-# tambien del codigo fuente, mas que todo por los pines de
-# los que se haga uso.
-
-AVRDUDE_PORT = /dev/ttyACM0
-AVRDUDE_SPEED = 115200
-
-# Mega 
-AVRDUDE_PROGRAMMER = wiring
-AVRDUDE_PARTNO = m2560
-HEXFILE_MAXSIZE = 258048
-ARDUINO_VARIANT = mega
-GCC_MCU = atmega2560
-
-# Uno
-#AVRDUDE_PROGRAMMER = arduino
-#AVRDUDE_PARTNO = m328p
-#HEXFILE_MAXSIZE = 32256
-#ARDUINO_VARIANT = uno
-#GCC_MCU = atmega328p
 
 # Herramientas de la toolchain para AVR
 AR = avr-ar
@@ -140,8 +122,6 @@ XFLAGS = -Os -Wall -fno-exceptions $(FLAGS)
 # Variables para configuracion de rootfs-additions-gen
 ROOTFS_ADDITIONS_BASE = rootfs-additions-base
 ROOTFS_ADDITIONS_GEN = rootfs-additions
-WPA_SUPPLICANT_SSID=tmpssid
-WPA_SUPPLICANT_PSK=tmppsk
 
 # Regla por defecto: mostrar ayuda.
 all: help
