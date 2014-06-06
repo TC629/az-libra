@@ -29,7 +29,7 @@ from werkzeug.utils import secure_filename
 # Otros modulos de la aplicacion.
 import utils
 
-from db import createDB, destroyDB, queryDB
+from db import alterDB, createDB, destroyDB, queryDB
 
 from protocols import LibraServerProtocol
 from protocols import HRProtocol # Utilizado por halt/reboot.
@@ -160,7 +160,9 @@ def logout():
 def dashboard():
     ''' Codigo que maneja el dashboard de la aplicacion. '''
 
-    products = [('1', 'Prueba'), ('2', 'Tumbis XXL')] # temporal
+    createDB()
+    products = queryDB('SELECT id, name FROM products;')
+    destroyDB()
 
     kwargs = {}
     kwargs['title'] = PAGE_DASHBOARD[1]
@@ -195,10 +197,68 @@ def products(page):
 
     return render_template('products.html', **kwargs)
 
+@app.route(PAGE_PRODUCT[0], methods=['POST', 'GET'])
 @app.route(PAGE_PRODUCT[0]+'/id/<int:id>', methods=['POST', 'GET'])
 @requireAuthenticatedUser()
-def product(id):
-    return "foo"
+def product(id=None):
+    ''' Codigo que maneja un producto. '''
+
+    createDB()
+
+    kwargs = {}
+    kwargs['product'] = (None,'','','')
+    kwargs['measurements'] = []
+    kwargs['title'] = 'Crear producto'
+    kwargs['mode'] = 'insert'
+    kwargs['serverAddr'] = CONFIG['NC_ADDRESS']
+    kwargs['serverPort'] = CONFIG['SERVER_PORT']
+
+    if(id is not None):
+        kwargs['mode'] = 'update'
+        if request.method == 'GET':
+            product = queryDB('SELECT * FROM products WHERE id = ?;', (id,))
+            if product:
+                kwargs['product'] = product[0]
+                measurements = queryDB('SELECT * FROM measurements WHERE product_id = ? LIMIT 25;', (id,))
+                kwargs['measurements'] = measurements
+                kwargs['title'] = product[0][1]
+            else:
+                abort(404)
+        else:
+            # Leemos el formulario y actualizamos.
+            name = request.form['name']
+            minWeight = request.form['minWeight']
+            maxWeight = request.form['maxWeight']
+            if isFloat(minWeight) and isFloat(maxWeight) and float(minWeight) < float(maxWeight) and len(name) > 0: 
+                alterDB('UPDATE products SET name = ?, min_weight = ?, max_weight = ? WHERE id = ?;',
+                    (name, minWeight, maxWeight, id))
+                flash('Producto actualizado!')
+            else:
+                flash('Datos invalidos!')
+
+            kwargs['product'] = (id,name,minWeight,maxWeight)
+            kwargs['title'] = name
+            kwargs['mode'] = 'update'
+            measurements = queryDB('SELECT * FROM measurements WHERE product_id = ? LIMIT 25;', (id,))
+            kwargs['measurements'] = measurements
+    else:
+        if request.method == 'POST':
+            # Creamos el producto.
+            name = request.form['name']
+            minWeight = request.form['minWeight']
+            maxWeight = request.form['maxWeight']
+            if isFloat(minWeight) and isFloat(maxWeight) and float(minWeight) < float(maxWeight) and len(name) > 0: 
+                id = alterDB('INSERT INTO products(name, min_weight, max_weight) VALUES (?,?,?);',
+                    (name, minWeight, maxWeight))
+                flash('Producto creado!')
+                return redirect(url_for('products'))
+            else:
+                flash('Datos invalidos!')
+                kwargs['product'] = (None, name, minWeight, maxWeight)
+
+    destroyDB() 
+      
+    return render_template('product.html', **kwargs)
 
 @app.route(PAGE_UPDATE[0], methods=['POST', 'GET'])
 @requireAuthenticatedUser()
@@ -407,6 +467,13 @@ def halt():
 
 def reboot():
     reactor.spawnProcess(HRProtocol('rebooting...'), os.path.join(APP_PATH, 'reboot'), (), {})
+
+def isFloat(s):
+    try:
+        f = float(s)
+        return True
+    except ValueError:
+        return False
 
 if __name__ == '__main__':
     main()

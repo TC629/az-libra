@@ -3,12 +3,19 @@
 {% block content %}
 
 <div>
+    <div class="pull-right" style="padding:20px;">
+      <a class="btn btn-default" href="{{ url_for('product') }}">Crear producto</a>
+    </div>
+    {% if products %}
     <table class="table">
-    <tr><th>Producto</th><th>&nbsp;</th></tr>
-    {% for product in products %}
-        <tr><td>{{ product[1] }}</td><td><a href="{{ url_for('product', id=product[0]) }}">Ver detalle</a></td></tr>
+    <tr><th>Producto</th><th>Acciones</th></tr>
+    {% for p in products %}
+        <tr><td>{{ p[1] }}</td><td><a href="{{ url_for('product', id=p[0]) }}">Ver detalle</a></td></tr>
     {% endfor %}
     </table>
+    {% else %}
+    <span>No hay productos.</span>
+    {% endif %}
 </div>
 
 <div>

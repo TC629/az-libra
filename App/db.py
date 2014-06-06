@@ -12,6 +12,13 @@ def queryDB(query, args=(), one=False):
     else:
         return ret
 
+def alterDB(query, args=()):
+    cur = g.db.execute(query, args)
+    g.db.commit()
+    id = cur.lastrowid
+    cur.close()
+    return id
+
 def createDB():
     g.db = sqlite3.connect(DATABASE_PATH)
 
