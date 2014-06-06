@@ -1,13 +1,16 @@
 import json
+import os
 
 from twisted.internet import reactor
 from twisted.internet.protocol import Protocol, ProcessProtocol
 from twisted.protocols.basic import LineReceiver
 from twisted.enterprise import adbapi
 
+from twisted.internet import utils as twisted_utils
+
 from autobahn.twisted.websocket import WebSocketServerProtocol
 
-from config import DATABASE_PATH
+from config import APP_PATH, DATABASE_PATH
 
 dbpool = adbapi.ConnectionPool('sqlite3', DATABASE_PATH, check_same_thread=False)
 
@@ -65,19 +68,21 @@ class ArduinoClientProtocol(LineReceiver):
 class LibraServerProtocol(WebSocketServerProtocol):
 
     def onConnect(self, request):
-        print('Cliente web conectado: {0}'.format(request.peer))
-        print(request)
+        print('Nueva conexion: {0}'.format(request.peer))
 
     def onOpen(self):
-        print('Websocket abierto')
-        msg = json.dumps({'shutdown' : None})
-        self.sendMessage(msg, False)
+        pass
 
     def onMessage(self, payload, isBinary):
-        print(payload)
+        args = json.loads(payload)
+        if(args['command'] == 'tocsv'):
+            output = twisted_utils.getProcessOutput(os.path.join(APP_PATH, 'tocsv'), (str(args['id']),))
+            output.addCallback(lambda val : self.sendMessage(val.replace('tmp','csv')))
+        else:
+            pass
 
     def onClose(self, wasClean, code, reason):
-        print('Websocket cerrado')
+        print('Conexion terminada.')
 
 class HRProtocol(ProcessProtocol):
     ''' HR (Halt/Reboot)

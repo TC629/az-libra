@@ -22,7 +22,7 @@
           <input type="text" class="form-control" name="maxWeight" id="maxWeight" value="{{ product[3] }}">
         </div>
 
-        <button type="submit" class="btn btn-default">{% if mode == 'update' %}Actualizar{% else %}Crear{% endif %}</button>
+        <button class="btn btn-default">{% if mode == 'update' %}Actualizar{% else %}Crear{% endif %}</button>
       </form>
     </div>
 </div>
@@ -32,7 +32,7 @@
     <div class="panel-body">
       {% if measurements %}
       <div class="pull-right" style="padding:20px;">
-        <button onclick="downloadCSV()">Descargar como CSV</button>
+        <a id="tocsv" name="tocsv" onclick="generateCSV()" class="btn btn-default">Generar CSV</a>
       </div>
       <table class="table">
         <tr><th>Escala</th><th>Peso</th><th>Fecha y hora</th></tr>
@@ -54,19 +54,23 @@
         var webSocket = null;
         var webSocketURI = "ws://{{serverAddr}}:{{serverPort}}/ws";
 
-        function downloadCSV() {
+        function generateCSV() {
             webSocket = new WebSocket(webSocketURI);
+            $("#tocsv").attr('disabled', 'disabled');
+            $("#tocsv").html('Generando...');
             
             webSocket.onopen = function() {
-                console.log("Conectado a: " + webSocketURI);
+              webSocket.send(JSON.stringify({'command' : 'tocsv', 'id' : {{ product[0] }}}));
             }
 
             webSocket.onclose = function(e) {
-                console.log("Desconectado de: " + webSocketURI + ", " + e);
             }
 
             webSocket.onmessage = function(e) {
-                console.log("Mensaje recibido: " + e.data);
+                $("#tocsv").removeAttr('disabled');
+                $("#tocsv").removeAttr('onclick');
+                $("#tocsv").attr('href',e.data);
+                $("#tocsv").html('Descargar');
             }
         };
 
