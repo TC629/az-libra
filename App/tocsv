@@ -1,6 +1,6 @@
 #!/bin/bash
 
-TMP=`mktemp --suffix=csv`
+TMP=`mktemp /tmp/XXXXXX.csv`
 ID=$1
 
 sqlite3 /var/libra/libra.sqlite3 <<!

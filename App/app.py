@@ -62,13 +62,15 @@ def main():
         wsgiResource = WSGIResource(reactor, threadPool, app)
         
         staticResource = File(STATIC_FILES_PATH)
+        tmpCSVResource = File('/tmp')
 
         webSocketFactory = WebSocketServerFactory('ws://{0}:{1}'.format(CONFIG['SERVER_INTERFACE'],
             CONFIG['SERVER_PORT'])) 
         webSocketFactory.protocol = LibraServerProtocol
         webSocketResource = WebSocketResource(webSocketFactory)
 
-        rootResource = WSGIRootResource(wsgiResource, {'static' : staticResource, 'ws' : webSocketResource})
+        rootResource = WSGIRootResource(wsgiResource, {'static' : staticResource, 'ws' : webSocketResource,
+            'csv' : tmpCSVResource })
 
         site = Site(rootResource)
         reactor.listenTCP(CONFIG['SERVER_PORT'], site)
