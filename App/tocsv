@@ -1,0 +1,13 @@
+#!/bin/bash
+
+TMP=`mktemp --suffix=csv`
+ID=$1
+
+sqlite3 /var/libra/libra.sqlite3 <<!
+.headers on
+.mode csv
+.output $TMP
+SELECT p.name AS producto, m.scale_id AS escala, m.weight AS peso, m.timestamp AS fecha FROM measurements m, products p WHERE p.id = $ID AND m.product_id = p.id;
+!
+
+echo $TMP
