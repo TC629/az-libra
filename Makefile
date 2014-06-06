@@ -216,6 +216,7 @@ install: build-db
 	sudo chown $(USER):$(USER) $(APP_SYMLINK)
 	chmod 755 $(APP_SYMLINK)/libra
 	chmod 755 $(APP_SYMLINK)/update.py
+	chmod 664 $(APP_FILES_PATH)/$(DB)
 
 # Genera el directorio rootfs-additions
 build-rootfs-additions: $(ROOTFS_ADDITIONS_BASE) build-db
