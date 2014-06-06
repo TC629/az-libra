@@ -276,6 +276,10 @@ En esta sección se listan fuentes de información que se han consultado en el p
 - [The Twisted Documentation](http://twistedmatrix.com/documents/current/core/howto/book.pdf)
 - [Using processes](http://twistedmatrix.com/documents/current/core/howto/process.html)
 
+###Websockets
+- [Web Socket Introduction](http://autobahn.ws/python/websocketintro.html)
+- [An Introduction To WebSockets](http://www.developerfusion.com/article/143158/an-introduction-to-websockets)
+
 ###U-Boot
 - [U-Boot Sunxi](http://linux-sunxi.org/U-Boot)
 - [u-boot-sunxi Wiki](http://github.com/linux-sunxi/u-boot-sunxi/wiki)
