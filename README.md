@@ -89,9 +89,11 @@ sudo adduser `whoami` dialout
 ##Accediendo el pcDuino desde la máquina de trabajo.
 Se utiliza un cable USB-serial (3.3V) para comunicarse con el pcDuino desde la máquina de trabajo, en particular se recomienda [este cable que ofrece Olimex](https://www.olimex.com/Products/Components/Cables/USB-Serial-Cable/USB-Serial-Cable-F).
 El cable esta configurado de la siguiente manera:
+
 - azul = tierra
 - verde = rx
 - rojo = tx
+
 Los pines del pcDuino a utilizar son los identificados como J5, refierase al *pinout* para identificarlos. Recuerde que debe conectar el rx del cable con el tx del pcDuino, el tx del cable con el rx del pcDuino y conectar las tierras.
 Asumiendo que el cable es el único dispositivo USB-serial conectado a la máquina de desarrollo, ejecute el siguiente comando para iniciar la comunicación.
 
@@ -246,9 +248,11 @@ Si se utiliza un lector externo (USB) los pasos son los mismos pero deberá sust
     ````
 
 ###Credenciales por defecto
+
 ####Linux
 - usuario: root
 - password: foobar
+
 ####Aplicación web
 - usuario: administrador
 - password: foobar
