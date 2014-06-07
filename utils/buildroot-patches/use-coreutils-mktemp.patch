@@ -1,0 +1,15 @@
+Include mktemp binary in the program list.
+Signed-off-by: Adolfo Garcia <adolfo.garcia.cr@gmail.com>
+
+diff -rupN buildroot-2014.02.orig/package/coreutils/coreutils.mk buildroot-2014.02/package/coreutils/coreutils.mk
+--- buildroot-2014.02.orig/package/coreutils/coreutils.mk	2014-02-27 14:51:23.000000000 -0600
++++ buildroot-2014.02/package/coreutils/coreutils.mk	2014-06-06 22:36:46.529112369 -0600
+@@ -20,7 +20,7 @@ COREUTILS_DEPENDENCIES = busybox
+ endif
+ 
+ COREUTILS_BIN_PROGS = cat chgrp chmod chown cp date dd df dir echo false hostname \
+-	ln ls mkdir mknod mv pwd rm rmdir vdir sleep stty sync touch true \
++	ln ls mkdir mknod mktemp mv pwd rm rmdir vdir sleep stty sync touch true \
+ 	uname join
+ 
+ COREUTILS_CONF_ENV = ac_cv_c_restrict=no \

@@ -166,7 +166,7 @@ avrdude-config:
 
 target:
 	mkdir -p $(DIR)
-	rm -f App/*.pyc
+	rm -f App/*
 	cp -r App/* $(DIR)
 
 target-with-hex: target avrdude-config $(HEXFILE)
@@ -178,6 +178,7 @@ target-with-hex: target avrdude-config $(HEXFILE)
 build-tarball: target
 	chmod 755 $(DIR)/libra
 	chmod 755 $(DIR)/update.py
+	chmod 755 $(DIR)/tocsv
 	tar -zcvf $(TARBALL) $(DIR)
 	rm -Rf $(DIR)
 	echo $(TARBALL) > update_pending
@@ -185,6 +186,7 @@ build-tarball: target
 build-tarball-with-hex: target-with-hex
 	chmod 755 $(DIR)/libra
 	chmod 755 $(DIR)/update.py
+	chmod 755 $(DIR)/tocsv
 	tar -zcvf $(TARBALL) $(DIR)
 	rm -Rf $(DIR)
 	echo $(TARBALL) > update_pending

@@ -12,6 +12,7 @@ patch -p1 < ../buildroot-patches/add-python-packages.patch
 patch -p1 < ../buildroot-patches/add-python-autobahn.patch
 patch -p1 < ../buildroot-patches/add-python-cffi.patch
 patch -p1 < ../buildroot-patches/i2c-tools-with-python-smbus.patch
+patch -p1 < ../buildroot-patches/use-coreutils-mktemp.patch
 
 # Copiamos el archivo de configuracion.
 cp ../buildroot-config .config
