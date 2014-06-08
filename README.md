@@ -1,7 +1,7 @@
 #Proyecto TCU-TC629-AZ
 
 ##Introducción
-En este proyecto se exploró la viabilidad de desarrollar un sistema automático para el control de pesos en una línea de producción (de una PYMe de la industria alimenticia) utilizando un presupuesto limitado. Un sistema de esta naturaleza debe poder utilizarse con diferentes productos cada uno con un rango de pesos aceptables, debe indicarle al operario mediante luces si se acepta o rechaza el producto, y debe registrar los pesos de los productos con pesos válidos.
+En este proyecto se exploró la viabilidad de desarrollar un sistema automático para el control de pesos en una línea de producción (de una MiPYME de la industria alimenticia) utilizando un presupuesto limitado. Un sistema de esta naturaleza debe poder utilizarse con diferentes productos cada uno con un rango de pesos aceptables, debe indicarle al operario mediante luces si se acepta o rechaza el producto, y debe registrar los pesos de los productos con pesos válidos.
 
 ##Descripción de la solución
 
@@ -20,11 +20,13 @@ La comunicación serial sigue un protocolo sencillo que consta de comandos compu
 El código de Arduino implementa una máquina de estados que se encarga de parsear los comandos recibidos. Cada vez que se reconoce un comando se almacena en un buffer (máximo 10) que es accesado a manera de cola.
 Los comandos son de la forma <code;arg>:
 
-- <0;*pesoMin*> : utilizar nuevo peso mínimo (también modifica la EEPROM)
-- <1;*pesoMax*> : utilizar nuevo peso máximo (también modifica la EEPROM)
-- <2;>        : reanudar lecturas
-- <3;>        : pausar lecturas
-- <4;>        : ping (para probar conexión serial)
+| Comando | Descripción |
+| :-----: | :---------: |
+| <0;pesoMin> | Utilizar pesoMin como el nuevo peso mínimo (también modifica la EEPROM). |
+| <1;pesoMax> | Utilizar pesoMax como el nuevo peso máximo (también modifica la EEPROM). |
+| <2;> | Reanudar las lecturas. |
+| <3;> | Pausar las lecturas. |
+| <4;> | Ping (para probar conexión serial). |
 
 Todos los comandos anteriores son respondidos con un *ack*, salvo último, que se responde con *pong*.
 En el proceso de desarrollo, se utilizó un *push button* para forzar un *halt* del Arduino (escapar el loop principal). Esto fué necesario porque problemas con la comunicación serial pudieron haber ocasionado que el *bootloader* no respondiera para subir otro programa.
@@ -77,6 +79,8 @@ plt.show()
 
 ```
 
+![Comparación de las muestras contra la curva estimada.](https://raw.githubusercontent.com/TC629/az-libra/master/doc/img/fitted-curve.png)
+
 ###Limitaciones
 - Precisión de las lecturas de la celda de carga: se utiliza un ADC de 16bits.
 - Limite en el número de celdas de carga: hasta 8 utilizando el diseño actual.
@@ -118,7 +122,8 @@ Se probó con las siguientes versiones:
 ###Instalar pre-requisitos
 
 Corra los siguientes comandos para instalar algunos paquetes necesarios.
-````
+
+```sh
 sudo su
 apt-get install git subversion mercurial
 apt-get install bison flex
@@ -133,35 +138,35 @@ apt-get install u-boot-tools
 apt-get install libffi-dev
 apt-get install screen
 exit 
-````
+```
 
 ###Correr scripts
 
 Haga *"utils/"* su directorio de trabajo y corra los siguientes comandos.
 Revise los archivos para más información de lo que sucede en este paso.
 
-````
+```sh
 ./clone-repos.sh
 ./build-ctng.sh
 ./build-arm-toolchain.sh
 ./build-buildroot.sh
 ./build-pythonvirtualenv.sh
-````
+```
 
 ###Construir las herramientas de Sunxi
 Haga *"utils/sunxi-tools/"* su directorio de trabajo y corra los siguientes comandos.
 
-````
+```sh
 make
-````
+```
 
 ###Permitir que el usuario utilice puertos seriales
 Debido a que se utiliza un puerto serial para acceder a la consola del pcduino, el usuario debe tener permisos para ello.
 Esto se logra agregando el usuario al grupo *dialout*, como se muestra a continuación.
 
-````
+```sh
 sudo adduser `whoami` dialout
-````
+```
 
 ##Accediendo el pcDuino desde la máquina de trabajo.
 Se utiliza un cable USB-serial (3.3V) para comunicarse con el pcDuino desde la máquina de trabajo, en particular se recomienda [este cable que ofrece Olimex](https://www.olimex.com/Products/Components/Cables/USB-Serial-Cable/USB-Serial-Cable-F).
@@ -174,9 +179,9 @@ El cable esta configurado de la siguiente manera:
 Los pines del pcDuino a utilizar son los identificados como J5, refierase al *pinout* para identificarlos. Recuerde que debe conectar el rx del cable con el tx del pcDuino, el tx del cable con el rx del pcDuino y conectar las tierras.
 Asumiendo que el cable es el único dispositivo USB-serial conectado a la máquina de desarrollo, ejecute el siguiente comando para iniciar la comunicación.
 
-````
+```sh
 screen /dev/ttyUSB0 115200
-````
+```
 
 ##Uso del *Makefile*
 
@@ -228,29 +233,29 @@ Si se utiliza un lector externo (USB) los pasos son los mismos pero deberá sust
 1. Haga *"utils/buildroot/output/images"* su directorio de trabajo.
 
 2. Ejecute:
-    ````
+    ```sh
         sudo su
-    ````
+    ```
 
 3. Ejecute:
-    ````
+    ```sh
         dd if=/dev/zero of=/dev/mmcblk0 bs=1024 count=32768
-    ````
+    ```
 
 4. Ejecute:
-    ````
+    ```sh
         dd if=sunxi-spl.bin of=/dev/mmcblk0 bs=1024 seek=8
-    ````
+    ```
 
 5. Ejecute:
-    ````
+    ```sh
         dd if=u-boot.img of=/dev/mmcblk0 bs=1024 seek=40
-    ````
+    ```
 
 6. Ejecute:
-    ````
+    ```sh
         fdisk /dev/mmcblk0
-    ````
+    ```
 
 7. Utilizando la consola de *fdisk* haga:
     - 7.1.  **n**
@@ -280,49 +285,49 @@ Si se utiliza un lector externo (USB) los pasos son los mismos pero deberá sust
     - 7.24. **w**
 
 8. Ejecute:
-    ````
+    ```sh
         mkfs.ext2 /dev/mmcblk0p1
         mkfs.ext4 /dev/mmcblk0p2
-    ````
+    ```
 
 9. Ejecute:
-    ````
+    ```sh
         mount /dev/mmcblk0p1 /mnt
-    ````
+    ```
 
 10. Ejecute:
-    ````
+    ```sh
         cp uImage /mnt
         cp script.bin /mnt
         cp boot.src /mnt
         sync
-    ````
+    ```
 
 11. Ejecute:
-    ````
+    ```sh
         umount /mnt
-    ````
+    ```
 
 12. Ejecute:
-    ````
+    ```sh
         mount /dev/mmcblk0p2 /mnt
-    ````
+    ```
 
 13. Ejecute:
-    ````
+    ```sh
         tar -C /mnt -xjpf rootfs.tar.bz2
         sync
-    ````
+    ```
 
 14. Ejecute:
-    ````
+    ```sh
         umount /mnt
-    ````
+    ```
 
 15. Ejecute:
-    ````
+    ```sh
         exit
-    ````
+    ```
 
 ###Credenciales por defecto
 
