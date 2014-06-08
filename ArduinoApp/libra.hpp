@@ -1,21 +1,28 @@
-#ifndef _LIBRA_HPP_
-#define _LIBRA_HPP_
+#ifndef LIBRA_HPP_
+#define LIBRA_HPP_
 
-#include <ChibiOS_AVR.h>
+// Define los estados en los que puede estar el controlador.
+enum ControllerState {
 
-// Buffer para la entrada serial.
-#define COMM_IN_BUFFER_SIZE 256
-static char commBuffer[COMM_IN_BUFFER_SIZE];
+    CONTROLLER_IDLE,
+    CONTROLLER_RUNNING
+};
 
-// Semaforo que se utiliza a manera de barrera para que 
-// los hilos esperen a que se establezca la comunicacion
-// con el pcDuino.
-uint8_t waiting_at_barrier = 0;
-SEMAPHORE_DECL(barrier_sem, 0);
+// Define los estados en los que puede estar una celda de carga.
+enum CellState {
 
-void chSetup();
+  CELL_READING,
+  CELL_READY,
+  CELL_STALLED
+};
 
-static WORKING_AREA(waCommThread, 64);
-static msg_t CommThread(void* arg);
+// Prototipos de los procedimientos y funciones.
+void setup();
+void loop();
+void serialEvent();
+
+float getWeight(const int addr);
+void setWeight(const int addr, const float value);
+
 
 #endif
