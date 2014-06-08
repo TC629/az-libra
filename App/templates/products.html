@@ -3,9 +3,12 @@
 {% block content %}
 
 <div>
-    <div class="pull-right" style="padding:20px;">
-      <a class="btn btn-default" href="{{ url_for('product') }}">Crear producto</a>
+    <div>
+      <div class="pull-right" style="padding:20px;">
+        <a class="btn btn-default" href="{{ url_for('product') }}">Crear producto</a>
+      </div>
     </div>
+
     {% if products %}
     <table class="table">
     <tr><th>Producto</th><th>Acciones</th></tr>

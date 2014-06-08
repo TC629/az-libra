@@ -81,7 +81,6 @@ def main():
             lcd.showMessage('{0}'.format(CONFIG['NC_ADDRESS']), '{0}'.format(CONFIG['SERVER_PORT']))
         else:
             lcd.showMessage('Desconectado')
-
     reactor.run()
 
 class requireAuthenticatedUser():
@@ -157,20 +156,38 @@ def logout():
     flash('Ha cerrado la sesion.')
     return redirect(url_for('login'))
 
-@app.route(PAGE_DASHBOARD[0], methods=['GET'])
+@app.route(PAGE_DASHBOARD[0], methods=['POST', 'GET'])
 @requireAuthenticatedUser()
 def dashboard():
     ''' Codigo que maneja el dashboard de la aplicacion. '''
 
     createDB()
     products = queryDB('SELECT id, name FROM products;')
-    destroyDB()
 
     kwargs = {}
     kwargs['title'] = PAGE_DASHBOARD[1]
     kwargs['serverAddr'] = CONFIG['NC_ADDRESS']
     kwargs['serverPort'] = CONFIG['SERVER_PORT']
     kwargs['products'] = products
+    kwargs['selected_product'] = CONFIG['CURRENT_PRODUCT']
+
+    if request.method == 'POST':
+
+        currentProduct = int(request.form['currentProduct'])
+        min_weight, max_weight = queryDB('SELECT min_weight, max_weight FROM products WHERE id = ?', (currentProduct,), one=True)
+
+        if app.mutex.acquire(False):
+            CONFIG['CURRENT_PRODUCT'] = currentProduct
+            utils.writeConfig(CONFIG, APP_CONFIG_PATH)
+            kwargs['selected_product'] = currentProduct
+            print(currentProduct)
+            arduino.setWeights(min_weight, max_weight)
+            flash('Se cambio el producto actual!')
+            app.mutex.release()
+        else:
+            flash(u'Dispositivo ocupado, alguien más intenta actualizarlo!')
+ 
+    destroyDB()    
 
     return render_template('dashboard.html', **kwargs)
 

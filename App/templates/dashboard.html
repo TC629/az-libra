@@ -13,7 +13,11 @@
                         <div class="col-xs-8">
                             <select name="currentProduct" class="form-control">
                                 {% for id,name in products %}
+                                {% if id == selected_product %}
+                                <option value="{{ id }}" selected="selected">{{ name }}</option>
+                                {% else %}
                                 <option value="{{ id }}">{{ name }}</option>
+                                {% endif %}
                                 {% endfor %}
                             </select>
                         </div>
@@ -32,6 +36,10 @@
             Mediciones recientes
             </div>
             <div class="panel-body">
+              <span>Mostrando las 15 m&aacute;s recientes.</span>
+              <table id="measurements" class="table">
+                <tr><th>#</th><th>Escala</th><th>Peso</th><th>Hora</th></tr>
+              </table>
             </div>
         </div>
     </div>
@@ -56,12 +64,15 @@
 
         var webSocket = null;
         var webSocketURI = "ws://{{serverAddr}}:{{serverPort}}/ws";
+        var measurementID = 0;
+        var maxMeasurements = 15;
 
         $(document).ready(function() {
             webSocket = new WebSocket(webSocketURI);
             
             webSocket.onopen = function() {
                 console.log("Conectado a: " + webSocketURI);
+                webSocket.send(JSON.stringify({'command' : 'update_dashboard'}))
             }
 
             webSocket.onclose = function(e) {
@@ -69,7 +80,19 @@
             }
 
             webSocket.onmessage = function(e) {
-                console.log("Mensaje recibido: " + e.data);
+
+                var data = JSON.parse(e.data);
+                var scale_id = data['scale_id'];
+                var weight = data['weight'];
+                var timestamp = data['timestamp'];
+                measurementID+= 1;
+                var rowID = "measurement"+measurementID;
+                var row = "<tr id=\""+rowID+"\"><td>"+measurementID+"</td><td>"+scale_id+"</td><td>"+weight+"</td><td>"+timestamp+"</td></tr>";
+                $("#measurements > tbody").append(row);
+                if(measurementID > maxMeasurements) {
+                    rowID = "#measurement"+(measurementID-maxMeasurements);
+                    $(rowID).remove();
+                }               
             }
         });
 

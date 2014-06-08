@@ -1,5 +1,6 @@
 import json
 import os
+import time
 
 from twisted.internet import reactor
 from twisted.internet.protocol import Protocol, ProcessProtocol
@@ -10,9 +11,13 @@ from twisted.internet import utils as twisted_utils
 
 from autobahn.twisted.websocket import WebSocketServerProtocol
 
-from config import APP_PATH, DATABASE_PATH
+from config import APP_PATH, CONFIG, DATABASE_PATH
 
 dbpool = adbapi.ConnectionPool('sqlite3', DATABASE_PATH, check_same_thread=False)
+
+# Lleva control de conexiones via WebSockets que solicitan datos
+# para el dashboard.
+dashboard_clients = []
 
 class LCDProtocol(Protocol):
     ''' Protocolo para controlar la LCD serial de Sparkfun.
@@ -36,34 +41,30 @@ class ArduinoClientProtocol(LineReceiver):
         desde Arduino utilizan Serial.println.
     '''
 
-    def alert(self, data):
-        print('Recibido: {0}'.format(data))
-
-    def processData(self, data):
-        # Prueba que se hizo con un push button.
-        #dbpool.runQuery("update foo set count = count+1 where id = 1;", ()).addCallback(self.alert)
-        pass
-
     def lineReceived(self, line):
-        try:
-            data = line.split()
-            self.processData(data)
-        except ValueError:
-            print('Error al intentar parsear: %s' % line)
-            return
+        data = line.split()[0]
 
-    def start(self, serverAddr):
-        ''' Envia un byte al Arduino para darle la sennal de iniciar.
-            Esto lo hacemos con el objetivo de que el Arduino no envie nada
-            hasta que el servidor libra este listo para recibir datos.
-        '''
-        print('Iniciando sistema Arduino.')
-        self.transport.write('b')
+        if data == 'ack' or data == 'nack' or data == 'halted':
+            print(data)
+        elif data == 'ready':
+            print('Arduino listo!')
+            self.transport.write('<2;>')
+        else:
+            scale_id, weight = data.split(';')
+            timestamp = time.strftime("%H:%M:%S")
+            print('{0} : {1} : {2}'.format(scale_id, weight, timestamp))
+            dbpool.runQuery('insert into measurements(product_id, scale_id, weight, timestamp) values(?, ?, ?, CURRENT_TIMESTAMP);',
+                (CONFIG['CURRENT_PRODUCT'], scale_id, weight))
+            for client in dashboard_clients:
+                client.updateDashboard(scale_id, weight, timestamp)
 
     def shutdown(self):
         ''' Envia un mensaje al Arduino para que se detenga. '''
         print('Apagando sistema Arduino.')
-        # Falta implementar
+        self.transport.write('<3;>')
+
+    def setWeights(self, min_weight, max_weight):
+        self.transport.write('<0;{0}><1;{1}>'.format(min_weight, max_weight))
 
 class LibraServerProtocol(WebSocketServerProtocol):
 
@@ -78,11 +79,17 @@ class LibraServerProtocol(WebSocketServerProtocol):
         if(args['command'] == 'tocsv'):
             output = twisted_utils.getProcessOutput(os.path.join(APP_PATH, 'tocsv'), (str(args['id']),))
             output.addCallback(lambda val : self.sendMessage(val.replace('tmp','csv')))
-        else:
-            pass
+        elif(args['command'] == 'update_dashboard'):
+            global dashboard_clients
+            dashboard_clients.append(self)
 
     def onClose(self, wasClean, code, reason):
-        print('Conexion terminada.')
+        global dashboard_clients
+        if self in dashboard_clients:
+            dashboard_clients.remove(self)
+
+    def updateDashboard(self, scale_id, weight, timestamp):
+        self.sendMessage(json.dumps({ 'scale_id' : scale_id, 'weight' : weight, 'timestamp' : timestamp}))
 
 class HRProtocol(ProcessProtocol):
     ''' HR (Halt/Reboot)

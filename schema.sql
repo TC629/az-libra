@@ -15,8 +15,3 @@ CREATE TABLE "products" (
     "min_weight" real NOT NULL, -- en gramos
     "max_weight" real NOT NULL  -- en gramos
 );
-
-BEGIN;
--- Por lo menos hay un producto en la base de datos.
-INSERT INTO "products"("name", "min_weight", "max_weight") VALUES('Prueba',40.46, 60.64);
-COMMIT;

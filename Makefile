@@ -69,8 +69,13 @@ ARDUINO_DIR = ArduinoApp
 ARDUINO_CORE_DIR = $(ARDUINO_DIR)/ArduinoCore
 ARDUINO_VARIANT_DIR = $(ARDUINO_DIR)/ArduinoVariant/$(ARDUINO_VARIANT)
 AVRLIBC_DIR = $(ARDUINO_CORE_DIR)/avr-libc
-CHIBIOS_DIR = $(ARDUINO_DIR)/ChibiOS
-CHIBIOS_UTIL_DIR = $(ARDUINO_DIR)/ChibiOS/utility
+EEPROM_DIR = $(ARDUINO_DIR)/EEPROM
+WIRE_DIR = $(ARDUINO_DIR)/Wire
+WIRE_TWI_DIR = $(WIRE_DIR)/utility
+ADAFRUIT_DIR = $(ARDUINO_DIR)/Adafruit_ADS1X15
+
+#CHIBIOS_DIR = $(ARDUINO_DIR)/ChibiOS
+#CHIBIOS_UTIL_DIR = $(ARDUINO_DIR)/ChibiOS/utility
 
 # Archivos de codigo fuente y codigo objeto
 ARDUINO_CORE_FILES = wiring_pulse.c WInterrupts.c wiring_digital.c wiring_shift.c wiring_analog.c wiring.c \
@@ -83,29 +88,51 @@ AVRLIBC_FILES = malloc.c realloc.c
 AVRLIBC_SRC = $(addprefix $(AVRLIBC_DIR)/, $(AVRLIBC_FILES))
 AVRLIBC_OBJ = $(AVRLIBC_SRC:.c=.o)
 
-CHIBIOS_FILES = ChibiOS_AVR.c
-CHIBIOS_SRC = $(addprefix $(CHIBIOS_DIR)/, $(CHIBIOS_FILES))
-CHIBIOS_OBJ = $(CHIBIOS_SRC:.c=.o)
+EEPROM_FILES = EEPROM.cpp
+EEPROM_SRC = $(addprefix $(EEPROM_DIR)/, $(EEPROM_FILES))
+EEPROM_OBJ = $(EEPROM_SRC:.cpp=.o)
 
-CHIBIOS_UTIL_FILES = board.c chlists.c chcond.c chmempools.c chmemcore.c chschd.c chmsg.c chvt.c chsys.c chsem.c \
+WIRE_FILES = Wire.cpp
+WIRE_SRC = $(addprefix $(WIRE_DIR)/, $(WIRE_FILES))
+WIRE_OBJ = $(WIRE_SRC:.cpp=.o)
+
+WIRE_TWI_FILES = twi.c
+WIRE_TWI_SRC = $(addprefix $(WIRE_TWI_DIR)/, $(WIRE_TWI_FILES))
+WIRE_TWI_OBJ = $(WIRE_TWI_SRC:.c=.o)
+
+ADAFRUIT_FILES = Adafruit_ADS1015.cpp
+ADAFRUIT_SRC = $(addprefix $(ADAFRUIT_DIR)/, $(ADAFRUIT_FILES))
+ADAFRUIT_OBJ = $(ADAFRUIT_SRC:.cpp=.o)
+
+#CHIBIOS_FILES = ChibiOS_AVR.c
+#CHIBIOS_SRC = $(addprefix $(CHIBIOS_DIR)/, $(CHIBIOS_FILES))
+#CHIBIOS_OBJ = $(CHIBIOS_SRC:.c=.o)
+
+#CHIBIOS_UTIL_FILES = board.c chlists.c chcond.c chmempools.c chmemcore.c chschd.c chmsg.c chvt.c chsys.c chsem.c \
 chregistry.c chqueues.c chdynamic.c chmtx.c chdebug.c chcore.c chheap.c chevents.c chmboxes.c hal.c chthreads.c 
-CHIBIOS_UTIL_SRC = $(addprefix $(CHIBIOS_UTIL_DIR)/, $(CHIBIOS_UTIL_FILES))
-CHIBIOS_UTIL_OBJ = $(CHIBIOS_UTIL_SRC:.c=.o)
+#CHIBIOS_UTIL_SRC = $(addprefix $(CHIBIOS_UTIL_DIR)/, $(CHIBIOS_UTIL_FILES))
+#CHIBIOS_UTIL_OBJ = $(CHIBIOS_UTIL_SRC:.c=.o)
 
-LIBRA_FILES = libra.cpp
+LIBRA_FILES = libra.cpp serialsm.cpp
 LIBRA_SRC = $(addprefix $(ARDUINO_DIR)/, $(LIBRA_FILES))
 LIBRA_OBJ = $(LIBRA_SRC:.cpp=.o)
 
-CORE_OBJ = $(ARDUINO_CORE_OBJ) $(AVRLIBC_OBJ)
-APP_OBJ = $(CHIBIOS_OBJ) $(CHIBIOS_UTIL_OBJ) $(LIBRA_OBJ)
+CORE_OBJ = $(ARDUINO_CORE_OBJ) $(AVRLIBC_OBJ) 
+APP_OBJ = $(WIRE_TWI_OBJ) $(WIRE_OBJ) $(EEPROM_OBJ) $(ADAFRUIT_OBJ) $(LIBRA_OBJ)
 
 # Banderas de GCC.
 INC = \
 -I$(ARDUINO_CORE_DIR) \
 -I$(ARDUINO_VARIANT_DIR) \
--I$(CHIBIOS_DIR) \
--I$(CHIBIOS_UTIL_DIR) \
--I$(ARDUINO_DIR)
+-I$(ARDUINO_DIR) \
+-I$(EEPROM_DIR) \
+-I$(WIRE_TWI_DIR) \
+-I$(WIRE_DIR) \
+-I$(ADAFRUIT_DIR)
+
+#-I$(CHIBIOS_DIR) \
+#-I$(CHIBIOS_UTIL_DIR) \
+
 
 FLAGS = -ffunction-sections -fdata-sections -mmcu=$(GCC_MCU) -DF_CPU=16000000L -MMD -DUSB_VID=null -DUSB_PID=null \
 -DARDUINO=105 $(INC)
@@ -131,9 +158,17 @@ $(AVRLIBC_OBJ) : $(AVRLIBC_SRC)
 
 $(ARDUINO_CORE_OBJ) : $(ARDUINO_CORE_SRC)
 
-$(CHIBIOS_OBJ): $(CHIBIOS_SRC)
+$(EEPROM_OBJ) : $(EEPROM_SRC)
 
-$(CHIBIOS_UTIL_OBJ): $(CHIBIOS_UTIL_SRC)
+$(WIRE_TWI_OBJ) : $(WIRE_TWI_SRC)
+
+$(WIRE_OBJ) : $(WIRE_SRC)
+
+$(ADAFRUIT_OBJ) : $(ADAFRUIT_SRC)
+
+#$(CHIBIOS_OBJ): $(CHIBIOS_SRC)
+
+#$(CHIBIOS_UTIL_OBJ): $(CHIBIOS_UTIL_SRC)
 
 $(LIBRA_OBJ) : $(LIBRA_SRC)
 
