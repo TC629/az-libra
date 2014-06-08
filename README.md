@@ -18,15 +18,15 @@ La comunicación serial sigue un protocolo sencillo que consta de comandos compu
 
 ###Comunicación serial
 El código de Arduino implementa una máquina de estados que se encarga de parsear los comandos recibidos. Cada vez que se reconoce un comando se almacena en un buffer (máximo 10) que es accesado a manera de cola.
-Los comandos son de la forma <code;arg>:
+Los comandos son de la forma &lt;code;arg&gt;:
 
 | Comando | Descripción |
 | :-----: | :---------: |
-| <0;pesoMin> | Utilizar pesoMin como el nuevo peso mínimo (también modifica la EEPROM). |
-| <1;pesoMax> | Utilizar pesoMax como el nuevo peso máximo (también modifica la EEPROM). |
-| <2;> | Reanudar las lecturas. |
-| <3;> | Pausar las lecturas. |
-| <4;> | Ping (para probar conexión serial). |
+| &lt;0;pesoMin&gt; | Utilizar pesoMin como el nuevo peso mínimo (también modifica la EEPROM). |
+| &lt;1;pesoMax&gt; | Utilizar pesoMax como el nuevo peso máximo (también modifica la EEPROM). |
+| &lt;2;&gt; | Reanudar las lecturas. |
+| &lt;3;&gt; | Pausar las lecturas. |
+| &lt;4;&gt; | Ping (para probar conexión serial). |
 
 Todos los comandos anteriores son respondidos con un *ack*, salvo último, que se responde con *pong*.
 En el proceso de desarrollo, se utilizó un *push button* para forzar un *halt* del Arduino (escapar el loop principal). Esto fué necesario porque problemas con la comunicación serial pudieron haber ocasionado que el *bootloader* no respondiera para subir otro programa.
@@ -92,7 +92,8 @@ plt.show()
 Se logró probar que es viable realizar un dispositivo para esta aplicación utilizando componentes accesibles, y utilizando tecnología *open source* y *open hardware*. Sin embargo, para poder hacer uso del dispositivo en un ambiente real, es necesario mejorar muchos aspectos; entre los que destacan la resolución de las lecturas de las celdas de carga y la calibración de las balanzas.
 Una alternativa sería utilizar el software que corre en el pcDuino y adaptarlo para que funcione con balanzas profesionales que se comuniquen utilizando RS-232, pero habría que utilizar una alternativa al pcDuino que tenga tantos puertos seriales como balanzas se ocupen.
 
-##Lista de materiales
+###La interfaz Web
+
 
 ##Dependencias
 Libra utiliza las siguientes dependencias. Por comodidad algunas se incluyen en el repositorio y para otras se incluye un *script* para descargarlas e instalarlas. Por favor refiérase a los sitios oficiales para ver las licencias de cada una.
