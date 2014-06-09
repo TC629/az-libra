@@ -3,6 +3,8 @@
 ##Introducción
 En este proyecto se exploró la viabilidad de desarrollar un sistema automático para el control de pesos en una línea de producción (de una MiPYME de la industria alimenticia) utilizando un presupuesto limitado. Un sistema de esta naturaleza debe poder utilizarse con diferentes productos cada uno con un rango de pesos aceptables, debe indicarle al operario mediante luces si se acepta o rechaza el producto, y debe registrar los pesos de los productos con pesos válidos.
 
+![El prototipo](https://raw.githubusercontent.com/TC629/az-libra/master/doc/img/prototype.jpg)
+
 ##Descripción de la solución
 
 ###El diseño en general
@@ -93,7 +95,19 @@ Se logró probar que es viable realizar un dispositivo para esta aplicación uti
 Una alternativa sería utilizar el software que corre en el pcDuino y adaptarlo para que funcione con balanzas profesionales que se comuniquen utilizando RS-232, pero habría que utilizar una alternativa al pcDuino que tenga tantos puertos seriales como balanzas se ocupen.
 
 ###La interfaz Web
+A continuación se ilustra con imágenes la interfaz Web de la aplicación.
 
+![Login](https://raw.githubusercontent.com/TC629/az-libra/master/doc/img/login.png)
+
+![Dashboard](https://raw.githubusercontent.com/TC629/az-libra/master/doc/img/dashboard.png)
+
+![Detalle de un producto](https://raw.githubusercontent.com/TC629/az-libra/master/doc/img/product.png)
+
+![Configuración de red](https://raw.githubusercontent.com/TC629/az-libra/master/doc/img/netconfig.png)
+
+![Subir actualización](https://raw.githubusercontent.com/TC629/az-libra/master/doc/img/update.png)
+
+![Actualizar password](https://raw.githubusercontent.com/TC629/az-libra/master/doc/img/update-password.png)
 
 ##Dependencias
 Libra utiliza las siguientes dependencias. Por comodidad algunas se incluyen en el repositorio y para otras se incluye un *script* para descargarlas e instalarlas. Por favor refiérase a los sitios oficiales para ver las licencias de cada una.
@@ -107,6 +121,7 @@ Libra utiliza las siguientes dependencias. Por comodidad algunas se incluyen en 
 
 ###Aplicación de Arduino
 - [Bibliotecas de Arduino (ArduinoCore, ArduinoVariant, EEPROM, Wire)](http://www.arduino.cc/)
+- [Adafruit_ADS1x15](https://github.com/adafruit/Adafruit_ADS1X15)
 
 ###Construcción del rootfs
 - [Buildroot](http://buildroot.uclibc.org/)
